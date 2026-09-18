@@ -2653,9 +2653,9 @@ const STRINGS = {
     fastWait: 'WAIT',
     fastThanks: 'THANKS',
     callBell: 'NOTRUF / BELL',
-    callActiveTitle: 'EMERGENCY NURSE CALL ACTIVE',
-    callActiveSub: 'Caregiver notified • High-priority alert broadcast',
-    callDismiss: '✓ I AM HERE / DISMISS',
+    callActiveTitle: '🚨 EMERGENCY ALARM ACTIVE',
+    callActiveSub: 'Alarm repeating continuously until caregiver stops it',
+    callDismiss: '🛑 STOP ALARM / I AM HERE',
     shiftLog: 'Log',
     shiftLogTitle: 'Caregiver Shift Log',
     shiftLogSub: 'Chronological communication & care requests',
@@ -2702,9 +2702,9 @@ const STRINGS = {
     fastWait: 'WARTEN',
     fastThanks: 'DANKE',
     callBell: 'NOTRUF',
-    callActiveTitle: 'NOTRUF AKTIV / PFLEGEKRAFT GERUFEN',
-    callActiveSub: 'Pflegekraft verständigt • Dringender Ruf abgesetzt',
-    callDismiss: '✓ ANWESEND / QUITTIEREN',
+    callActiveTitle: '🚨 NOTRUF AKTIV / ALARM',
+    callActiveSub: 'Alarm wiederholt sich fortlaufend bis zum Stopp durch Pflegekraft',
+    callDismiss: '🛑 NOTRUF STOPPEN / ANWESEND',
     shiftLog: 'Log',
     shiftLogTitle: 'Pflegekraft-Schichtprotokoll',
     shiftLogSub: 'Chronologische Übersicht aller Mitteilungen & Rufe',
@@ -3214,9 +3214,65 @@ function handleFast(type, btnElement) {
 /* ==========================================================================
      Emergency Nurse Call / Loud Bell
      ========================================================================== */
+let callBellActive = false;
+let callBellTimer = null;
+
+function playEmergencyAlertIteration() {
+  if (!callBellActive) return;
+
+  // 1. Play loud chime
+  sound.nurseBell();
+
+  // 2. High-priority voice announcement
+  const msgEn = 'Emergency! Caregiver needed immediately!';
+  const msgDe = 'Notruf! Pflegekraft wird dringend benötigt!';
+  const spoken = state.lang === 'de' ? msgDe : msgEn;
+
+  if (soundOn && 'speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+      setTimeout(() => {
+        if (!callBellActive) return;
+        try {
+          const u = new SpeechSynthesisUtterance(spoken);
+          u.lang = state.lang === 'de' ? 'de-DE' : 'en-US';
+          const voice = getBestVoice(state.lang);
+          if (voice) u.voice = voice;
+          u.rate = 0.95;
+          u.pitch = 1.05;
+
+          u.onend = () => {
+            if (callBellActive) {
+              callBellTimer = setTimeout(playEmergencyAlertIteration, 1000);
+            }
+          };
+          u.onerror = () => {
+            if (callBellActive) {
+              callBellTimer = setTimeout(playEmergencyAlertIteration, 2500);
+            }
+          };
+
+          activeUtterance = u;
+          window.speechSynthesis.speak(u);
+        } catch (e) {
+          if (callBellActive) callBellTimer = setTimeout(playEmergencyAlertIteration, 3000);
+        }
+      }, 50);
+    } catch (e) {
+      if (callBellActive) callBellTimer = setTimeout(playEmergencyAlertIteration, 3000);
+    }
+  } else {
+    if (callBellActive) {
+      callBellTimer = setTimeout(playEmergencyAlertIteration, 3000);
+    }
+  }
+}
+
 function triggerCallBell() {
   if (!canTap()) return;
-  sound.nurseBell();
+  callBellActive = true;
+  clearTimeout(callBellTimer);
+
   const overlay = document.getElementById('call-bell-overlay');
   if (overlay) overlay.classList.add('active');
 
@@ -3225,18 +3281,25 @@ function triggerCallBell() {
   const spoken = state.lang === 'de' ? msgDe : msgEn;
 
   showToast(`🚨 ${spoken}`);
-  say(spoken, state.lang);
+  playEmergencyAlertIteration();
   logShiftEvent('call', msgEn, msgDe, '🚨');
 }
 
 function dismissCallBell() {
+  callBellActive = false;
+  clearTimeout(callBellTimer);
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+
   sound.select();
   const overlay = document.getElementById('call-bell-overlay');
   if (overlay) overlay.classList.remove('active');
-  const dismissText = state.lang === 'de' ? 'Pflegekraft anwesend' : 'Caregiver is here';
+
+  const dismissText = state.lang === 'de' ? 'Notruf beendet. Pflegekraft anwesend.' : 'Emergency alarm stopped. Caregiver is here.';
   showToast(`✓ ${dismissText}`);
   if (instantTalk) say(dismissText, state.lang);
-  logShiftEvent('ack', 'Call acknowledged by caregiver', 'Notruf durch Pflegekraft quittiert', '✓');
+  logShiftEvent('ack', 'Emergency alarm stopped & acknowledged', 'Notruf beendet & durch Pflegekraft quittiert', '🛑');
 }
 
 /* ==========================================================================
