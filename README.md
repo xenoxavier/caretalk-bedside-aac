@@ -91,7 +91,9 @@ Navigate to: **[http://localhost:8420](http://localhost:8420)**
 
 | Feature | Description | Bedside Benefit |
 |---|---|---|
-| **Instant Talk Mode** | Speaks immediately upon tapping any button | Zero cognitive load for fatigued patients |
+| **Full Talking Keyboard** | Language-adaptive layout (**QWERTZ** with `Ä, Ö, Ü, ß` for German, **QWERTY** for English) | Natural, effortless typing with numbers and control keys |
+| **Clickable Autocomplete** | Dynamic predictive word suggestions bar above the keyboard with medical and comfort vocabulary | 1-tap word completion saves energy and reduces typing fatigue |
+| **Instant Talk Mode** | Speaks immediately upon tapping any button or key | Zero cognitive load for fatigued patients |
 | **Fast Response Bar** | Persistent top-level buttons: *YES / JA*, *NO / NEIN*, *WAIT / WARTEN*, *THANKS / DANKE* | Instant answers during doctor/nurse rounds |
 | **Smart Toggle Opposites** | Single button toggles state (*Watch TV ↔ Finished TV*, *Lights On ↔ Lights Off*) | Prevents clutter; remembers previous action |
 | **Emergency Nurse Call (Notruf)** | High-priority siren with flashing bedside screen and dismissal safety check | Audible room alert for urgent assistance |

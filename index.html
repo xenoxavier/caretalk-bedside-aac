@@ -659,17 +659,158 @@
      Variant B Details: Persistent Split Rail
      ========================================================================== */
   .v-b .main-b { flex: 1; display: flex; overflow: hidden; }
-  .v-b .grid-col { flex: 0 0 58%; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
-  .v-b .keyboard-col { flex: 1; display: flex; flex-direction: column; padding: 18px; overflow-y: auto; background: var(--surface-subtle); }
-  .v-b .mini-keys { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: auto; padding-top: 14px; }
-  .v-b .mini-key {
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; padding: 12px 0; cursor: pointer; color: var(--ink);
+  .v-b .grid-col { flex: 0 0 55%; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
+  .v-b .keyboard-col { flex: 1; display: flex; flex-direction: column; padding: 16px; overflow-y: auto; background: var(--surface-subtle); gap: 10px; }
+
+  /* ==========================================================================
+     Full Talking Keyboard & Autocomplete Predictive Engine
+     ========================================================================== */
+  .autocomplete-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
     box-shadow: var(--shadow-subtle);
-    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .v-b .mini-key:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-  .v-b .mini-key:active, .v-b .mini-key.talking-now { transform: scale(0.9); background: var(--primary-light); color: var(--primary-ink); }
+  .autocomplete-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 38px;
+    align-items: center;
+  }
+  .autocomplete-empty {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    padding: 4px 0;
+  }
+  .suggestion-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-subtle);
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 7px 12px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .suggestion-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 12px var(--primary-glow);
+  }
+  .suggestion-chip:active {
+    transform: scale(0.95);
+    background: var(--primary-light);
+  }
+  .suggestion-icon {
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+  .suggestion-text {
+    white-space: nowrap;
+  }
+
+  .kb-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .kb-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+  .kb-row {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    justify-content: center;
+  }
+  .kb-key {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.02rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-subtle);
+    user-select: none;
+    transition: all 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .kb-key:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+  .kb-key:active, .kb-key.talking-now {
+    transform: scale(0.90);
+    background: var(--primary-light);
+    color: var(--primary-ink);
+    border-color: var(--primary);
+  }
+  .kb-key-space {
+    flex: 3.5;
+    font-size: 0.84rem;
+    letter-spacing: 0.5px;
+    background: var(--surface-subtle);
+  }
+  .kb-key-backspace {
+    flex: 1.2;
+    background: var(--surface-subtle);
+    font-size: 1.2rem;
+  }
+  .kb-key-clear {
+    flex: 1.3;
+    font-size: 0.8rem;
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #DC2626;
+  }
+  .kb-key-clear:hover {
+    border-color: #DC2626;
+    color: #DC2626;
+    background: rgba(239, 68, 68, 0.15);
+  }
+  .kb-key-speak {
+    flex: 1.5;
+    font-size: 0.82rem;
+    background: var(--primary);
+    color: var(--primary-ink);
+    border-color: var(--primary);
+  }
+  .kb-key-speak:hover {
+    background: var(--primary-hover);
+    color: var(--primary-ink);
+  }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.85); }
+    100% { opacity: 1; transform: scale(1); }
+  }
 
   /* ==========================================================================
      Variant C Details: Message-First Layout
@@ -1705,6 +1846,14 @@
               <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
               <div class="chip-row" id="continuations-a"></div>
             </div>
+            <div class="autocomplete-section">
+              <div class="chip-label">💡 <span data-i18n="suggestionsLabel">Word Suggestions</span></div>
+              <div class="autocomplete-row" id="autocomplete-row-a"></div>
+            </div>
+            <div class="kb-section">
+              <div class="chip-label">⌨️ <span data-i18n="talkingKeys">Talking Keyboard</span></div>
+              <div class="full-keyboard" id="keyboard-a"></div>
+            </div>
           </div>
         </div>
 
@@ -1782,8 +1931,14 @@
                 <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
                 <div class="chip-row" id="continuations-b"></div>
               </div>
-              <div class="chip-label" style="margin-top:auto;">⌨️ <span data-i18n="talkingKeys">Talking Keyboard</span></div>
-              <div class="mini-keys" id="mini-keys-b"></div>
+              <div class="autocomplete-section">
+                <div class="chip-label">💡 <span data-i18n="suggestionsLabel">Word Suggestions</span></div>
+                <div class="autocomplete-row" id="autocomplete-row-b"></div>
+              </div>
+              <div class="kb-section">
+                <div class="chip-label">⌨️ <span data-i18n="talkingKeys">Talking Keyboard</span></div>
+                <div class="full-keyboard" id="keyboard-b"></div>
+              </div>
             </div>
           </div>
 
@@ -1887,9 +2042,13 @@
               <div class="chip-label">✨ <span data-i18n="langLabel">Starters</span></div>
               <div class="chip-row" id="starters-c"></div>
             </div>
-            <div class="chip-section">
+            <div class="chip-section" style="margin-bottom:6px;">
               <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
               <div class="chip-row" id="continuations-c"></div>
+            </div>
+            <div class="autocomplete-section" style="margin-top:6px;">
+              <div class="chip-label">💡 <span data-i18n="suggestionsLabel">Word Suggestions</span></div>
+              <div class="autocomplete-row" id="autocomplete-row-c"></div>
             </div>
           </div>
 
@@ -2464,7 +2623,8 @@ const STRINGS = {
     voiceEnglish: 'English Voice',
     testVoiceBtn: '▶ Test',
     speechSpeed: 'Speech Speed (Rate)',
-    speechPitch: 'Voice Pitch (Warmth)'
+    speechPitch: 'Voice Pitch (Warmth)',
+    suggestionsLabel: 'Word Suggestions'
   },
   de: {
     tagline: 'Pflege-Sprachausgabe',
@@ -2512,7 +2672,8 @@ const STRINGS = {
     voiceEnglish: 'Englische Stimme',
     testVoiceBtn: '▶ Probe hören',
     speechSpeed: 'Sprechgeschwindigkeit',
-    speechPitch: 'Tonhöhe (Klangfarbe)'
+    speechPitch: 'Tonhöhe (Klangfarbe)',
+    suggestionsLabel: 'Wortvorschläge'
   }
 };
 
@@ -2551,32 +2712,31 @@ const FAST_RESPONSES = {
   }
 };
 
-/* Smart Toggle Buttons with Pairs & Opposites */
+/* Quick Action Soundboard */
 const QUICK_ACTIONS = [
-  { id:'water', cat:'thing', icon:'droplet', en:'Water', de:'Wasser', phrase:{ en:'I need water.', de:'Ich brauche bitte etwas Wasser.' } },
-  { id:'food', cat:'thing', icon:'food', en:'Food', de:'Essen', phrase:{ en:'I need food.', de:'Ich möchte bitte etwas essen.' } },
+  { id:'water', cat:'thing', icon:'droplet', en:'Water', de:'Wasser', phrase:{ en:'I would like a drink of water, please.', de:'Ich möchte bitte etwas Wasser trinken.' } },
+  { id:'food', cat:'thing', icon:'food', en:'Food', de:'Essen', phrase:{ en:'I would like something to eat.', de:'Ich habe Hunger und möchte gerne etwas essen.' } },
   { 
     id:'tv', cat:'thing', isToggle: true,
     states: [
-      { icon:'tv', en:'Watch TV', de:'Fernsehen', phrase:{ en:'I want to watch TV.', de:'Ich möchte bitte fernsehen.' }, badge:{ en:'OFF', de:'AUS' } },
-      { icon:'tvOff', en:'Turn TV Off', de:'TV aus', phrase:{ en:'Please turn the TV off.', de:'Bitte schalten Sie den Fernseher aus.' }, badge:{ en:'ON', de:'AN' } }
+      { icon:'tv', en:'Watch TV', de:'Fernsehen', phrase:{ en:'I would like to watch TV, please.', de:'Ich möchte bitte den Fernseher anmachen.' }, badge:{ en:'OFF', de:'AUS' } },
+      { icon:'tvOff', en:'Done with TV', de:'Fertig mit TV', phrase:{ en:'I am finished watching TV. Please turn it off.', de:'Ich bin fertig mit Fernsehen, bitte schalten Sie ihn aus.' }, badge:{ en:'ON', de:'AN' } }
     ]
   },
-  { id:'medication', cat:'thing', icon:'pill', en:'Medication', de:'Medikamente', phrase:{ en:'I need my medication.', de:'Ich brauche bitte meine Medikamente.' } },
-  { id:'toilet', cat:'social', icon:'wc', en:'Toilet', de:'Toilette', phrase:{ en:'I need the toilet.', de:'Ich muss bitte dringend zur Toilette.' } },
-  { id:'help', cat:'social', icon:'bell', en:'Help', de:'Hilfe', phrase:{ en:'I need help!', de:'Bitte helfen Sie mir!' } },
+  { id:'pill', cat:'thing', icon:'pill', en:'Medicine', de:'Medikamente', phrase:{ en:'I need my medication.', de:'Ich brauche bitte meine Medikamente.' } },
+  { id:'wc', cat:'thing', icon:'wc', en:'Toilet', de:'Toilette', phrase:{ en:'I need to use the bathroom.', de:'Ich muss bitte dringend auf die Toilette.' } },
   { 
     id:'wheelchair', cat:'action', isToggle: true,
     states: [
-      { icon:'wheelchair', en:'To Wheelchair', de:'In Rollstuhl', phrase:{ en:'Please help me into the wheelchair.', de:'Bitte helfen Sie mir in den Rollstuhl.' }, badge:{ en:'BED', de:'BETT' } },
-      { icon:'bed', en:'Back to Bed', de:'Ins Bett', phrase:{ en:'Please help me back into bed.', de:'Bitte helfen Sie mir zurück ins Bett.' }, badge:{ en:'CHAIR', de:'STUHL' } }
+      { icon:'wheelchair', en:'Wheelchair', de:'In Rollstuhl', phrase:{ en:'I would like to get into the wheelchair.', de:'Ich möchte bitte in den Rollstuhl gesetzt werden.' }, badge:{ en:'IN BED', de:'IM BETT' } },
+      { icon:'bedReturn', en:'Back to Bed', de:'Ins Bett', phrase:{ en:'I would like to go back into bed.', de:'Ich möchte bitte wieder zurück ins Bett gelegt werden.' }, badge:{ en:'IN CHAIR', de:'IM STUHL' } }
     ]
   },
   { 
     id:'outside', cat:'action', isToggle: true,
     states: [
-      { icon:'doorOut', en:'Go outside', de:'Rausgehen', phrase:{ en:'I want to go outside.', de:'Ich möchte bitte nach draußen an die frische Luft.' }, badge:{ en:'IN', de:'DRINNEN' } },
-      { icon:'doorIn', en:'Go inside', de:'Reingehen', phrase:{ en:'I want to go back inside.', de:'Ich möchte bitte wieder nach drinnen.' }, badge:{ en:'OUT', de:'DRAUSSEN' } }
+      { icon:'outside', en:'Go Outside', de:'Nach draußen', phrase:{ en:'I would like to go outside for fresh air.', de:'Ich möchte gerne etwas nach draußen an die frische Luft.' }, badge:{ en:'INSIDE', de:'DRINNEN' } },
+      { icon:'insideReturn', en:'Go Inside', de:'Wieder rein', phrase:{ en:'I would like to go back inside now.', de:'Ich möchte bitte wieder hineingehen.' }, badge:{ en:'OUTSIDE', de:'DRAUSSEN' } }
     ]
   },
   { id:'position', cat:'action', icon:'move', en:'Change position', de:'Position ändern', phrase:{ en:'Please change my position.', de:'Bitte lagern Sie mich um.' } },
@@ -2632,7 +2792,154 @@ const CONTINUATIONS = [
   { en:'glasses', de:'meine Brille' }
 ];
 
-const MINI_KEYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','␣','⌫'];
+/* Rich Bilingual Clinical & Care Autocomplete Dictionary */
+const DICTIONARY = {
+  de: [
+    { word: 'Wasser', icon: '💧' },
+    { word: 'Schmerzen', icon: '🩹' },
+    { word: 'Hilfe', icon: '🚨' },
+    { word: 'Bitte', icon: '🙏' },
+    { word: 'Danke', icon: '💙' },
+    { word: 'Toilette', icon: '🚻' },
+    { word: 'Medikamente', icon: '💊' },
+    { word: 'Arzt', icon: '👨‍⚕️' },
+    { word: 'Schwester', icon: '👩‍⚕️' },
+    { word: 'Pfleger', icon: '👨‍⚕️' },
+    { word: 'Kissen', icon: '🛏️' },
+    { word: 'Decke', icon: '🛋️' },
+    { word: 'Bett', icon: '🛏️' },
+    { word: 'Aufstehen', icon: '🚶' },
+    { word: 'Hinlegen', icon: '🛌' },
+    { word: 'Aufsetzen', icon: '💺' },
+    { word: 'Umdrehen', icon: '🔄' },
+    { word: 'Rollstuhl', icon: '🦼' },
+    { word: 'Kalt', icon: '❄️' },
+    { word: 'Warm', icon: '🔥' },
+    { word: 'Heiß', icon: '☀️' },
+    { word: 'Essen', icon: '🍲' },
+    { word: 'Trinken', icon: '🥤' },
+    { word: 'Tee', icon: '🍵' },
+    { word: 'Kaffee', icon: '☕' },
+    { word: 'Suppe', icon: '🥣' },
+    { word: 'Hunger', icon: '🍽️' },
+    { word: 'Durst', icon: '💧' },
+    { word: 'Schlafen', icon: '😴' },
+    { word: 'Müde', icon: '🥱' },
+    { word: 'Fernseher', icon: '📺' },
+    { word: 'Licht', icon: '💡' },
+    { word: 'Fenster', icon: '🪟' },
+    { word: 'Tür', icon: '🚪' },
+    { word: 'Brille', icon: '👓' },
+    { word: 'Handy', icon: '📱' },
+    { word: 'Telefon', icon: '📞' },
+    { word: 'Familie', icon: '👨‍👩‍👧' },
+    { word: 'Frau', icon: '👩' },
+    { word: 'Mann', icon: '👨' },
+    { word: 'Tochter', icon: '👧' },
+    { word: 'Sohn', icon: '👦' },
+    { word: 'Warten', icon: '⏳' },
+    { word: 'Jetzt', icon: '⏱️' },
+    { word: 'Später', icon: '🕒' },
+    { word: 'Gleich', icon: '⚡' },
+    { word: 'Ja', icon: '✓' },
+    { word: 'Nein', icon: '✕' },
+    { word: 'Gut', icon: '👍' },
+    { word: 'Schlecht', icon: '👎' },
+    { word: 'Besser', icon: '📈' },
+    { word: 'Schlechter', icon: '📉' },
+    { word: 'Kopf', icon: '🧠' },
+    { word: 'Bauch', icon: '🫄' },
+    { word: 'Rücken', icon: '🦴' },
+    { word: 'Bein', icon: '🦵' },
+    { word: 'Arm', icon: '💪' },
+    { word: 'Hals', icon: '🧣' },
+    { word: 'Brust', icon: '🫀' },
+    { word: 'Luft', icon: '💨' },
+    { word: 'Atemnot', icon: '🫁' },
+    { word: 'Übelkeit', icon: '🤢' },
+    { word: 'Schwindel', icon: '💫' },
+    { word: 'Juckreiz', icon: '🐜' },
+    { word: 'Waschen', icon: '🧼' },
+    { word: 'Zähne', icon: '🪥' },
+    { word: 'Duschen', icon: '🚿' },
+    { word: 'Lüften', icon: '🍃' },
+    { word: 'Ruhe', icon: '🤫' },
+    { word: 'Musik', icon: '🎵' },
+    { word: 'Buch', icon: '📖' }
+  ],
+  en: [
+    { word: 'Water', icon: '💧' },
+    { word: 'Pain', icon: '🩹' },
+    { word: 'Help', icon: '🚨' },
+    { word: 'Please', icon: '🙏' },
+    { word: 'Thank you', icon: '💙' },
+    { word: 'Bathroom', icon: '🚻' },
+    { word: 'Toilet', icon: '🚽' },
+    { word: 'Medicine', icon: '💊' },
+    { word: 'Doctor', icon: '👨‍⚕️' },
+    { word: 'Nurse', icon: '👩‍⚕️' },
+    { word: 'Pillow', icon: '🛏️' },
+    { word: 'Blanket', icon: '🛋️' },
+    { word: 'Bed', icon: '🛏️' },
+    { word: 'Sit up', icon: '💺' },
+    { word: 'Lie down', icon: '🛌' },
+    { word: 'Stand up', icon: '🚶' },
+    { word: 'Turn over', icon: '🔄' },
+    { word: 'Wheelchair', icon: '🦼' },
+    { word: 'Cold', icon: '❄️' },
+    { word: 'Warm', icon: '🔥' },
+    { word: 'Hot', icon: '☀️' },
+    { word: 'Food', icon: '🍲' },
+    { word: 'Drink', icon: '🥤' },
+    { word: 'Tea', icon: '🍵' },
+    { word: 'Coffee', icon: '☕' },
+    { word: 'Soup', icon: '🥣' },
+    { word: 'Hungry', icon: '🍽️' },
+    { word: 'Thirsty', icon: '💧' },
+    { word: 'Sleep', icon: '😴' },
+    { word: 'Tired', icon: '🥱' },
+    { word: 'TV', icon: '📺' },
+    { word: 'Light', icon: '💡' },
+    { word: 'Window', icon: '🪟' },
+    { word: 'Door', icon: '🚪' },
+    { word: 'Glasses', icon: '👓' },
+    { word: 'Phone', icon: '📱' },
+    { word: 'Family', icon: '👨‍👩‍👧' },
+    { word: 'Wife', icon: '👩' },
+    { word: 'Husband', icon: '👨' },
+    { word: 'Daughter', icon: '👧' },
+    { word: 'Son', icon: '👦' },
+    { word: 'Wait', icon: '⏳' },
+    { word: 'Now', icon: '⏱️' },
+    { word: 'Later', icon: '🕒' },
+    { word: 'Soon', icon: '⚡' },
+    { word: 'Yes', icon: '✓' },
+    { word: 'No', icon: '✕' },
+    { word: 'Good', icon: '👍' },
+    { word: 'Bad', icon: '👎' },
+    { word: 'Better', icon: '📈' },
+    { word: 'Worse', icon: '📉' },
+    { word: 'Head', icon: '🧠' },
+    { word: 'Stomach', icon: '🫄' },
+    { word: 'Back', icon: '🦴' },
+    { word: 'Leg', icon: '🦵' },
+    { word: 'Arm', icon: '💪' },
+    { word: 'Throat', icon: '🧣' },
+    { word: 'Chest', icon: '🫀' },
+    { word: 'Air', icon: '💨' },
+    { word: 'Breathing', icon: '🫁' },
+    { word: 'Nausea', icon: '🤢' },
+    { word: 'Dizzy', icon: '💫' },
+    { word: 'Itch', icon: '🐜' },
+    { word: 'Wash', icon: '🧼' },
+    { word: 'Teeth', icon: '🪥' },
+    { word: 'Shower', icon: '🚿' },
+    { word: 'Fresh air', icon: '🍃' },
+    { word: 'Quiet', icon: '🤫' },
+    { word: 'Music', icon: '🎵' },
+    { word: 'Book', icon: '📖' }
+  ]
+};
 
 const PAIN_LOCATIONS = [
   { id: 'head', cat: 'head', icon: 'partHead', en: 'Head', de: 'Kopf', sub: { en: 'Forehead & Scalp', de: 'Stirn & Kopf' } },
@@ -2712,6 +3019,8 @@ function renderAll() {
   });
   updateAllQuickButtons();
   updateAllChips();
+  updateAllKeyboards();
+  updateAllAutocompletes();
   renderPainLocations();
   updateShiftLogUI();
 }
@@ -2964,29 +3273,200 @@ function handleChipPress(chipObj, btnElement) {
   logShiftEvent('chip', chipObj.en, chipObj.de, '✨');
 }
 
+function getActiveTypedWord() {
+  if (!state.composing.length) return '';
+  const last = state.composing[state.composing.length - 1];
+  if (typeof last === 'string') {
+    const parts = last.trim().split(/\s+/);
+    return parts[parts.length - 1] || '';
+  }
+  return '';
+}
+
+function getWordSuggestions() {
+  const lang = state.lang;
+  const list = DICTIONARY[lang] || [];
+  const typedWord = getActiveTypedWord().toLowerCase().trim();
+
+  if (!typedWord) {
+    return list.slice(0, 8);
+  }
+
+  const startsWith = list.filter(item => item.word.toLowerCase().startsWith(typedWord));
+  const contains = list.filter(item => !item.word.toLowerCase().startsWith(typedWord) && item.word.toLowerCase().includes(typedWord));
+  const combined = [...startsWith, ...contains];
+
+  if (combined.length < 8) {
+    QUICK_ACTIONS.forEach(qa => {
+      const w = qa[lang];
+      if (w && w.toLowerCase().includes(typedWord) && !combined.some(c => c.word.toLowerCase() === w.toLowerCase())) {
+        combined.push({ word: w, icon: qa.badge ? '⭐' : '✨' });
+      }
+    });
+  }
+
+  return combined.slice(0, 8);
+}
+
+function handleSuggestionClick(suggestedWord, icon) {
+  if (!canTap()) return;
+  sound.select();
+
+  const currentPrefix = getActiveTypedWord();
+  state.quickPhrase = null;
+
+  if (state.composing.length > 0) {
+    const last = state.composing[state.composing.length - 1];
+    if (typeof last === 'string') {
+      if (currentPrefix) {
+        const lastIndex = last.lastIndexOf(currentPrefix);
+        if (lastIndex !== -1) {
+          state.composing[state.composing.length - 1] = last.substring(0, lastIndex) + suggestedWord + ' ';
+        } else {
+          state.composing[state.composing.length - 1] += ' ' + suggestedWord + ' ';
+        }
+      } else {
+        state.composing[state.composing.length - 1] += suggestedWord + ' ';
+      }
+    } else {
+      state.composing.push(suggestedWord + ' ');
+    }
+  } else {
+    state.composing.push(suggestedWord + ' ');
+  }
+
+  if (typeof state.composing[state.composing.length - 1] === 'string') {
+    state.composing[state.composing.length - 1] = state.composing[state.composing.length - 1].replace(/\s+/g, ' ');
+  }
+
+  renderAll();
+
+  if (instantTalk) {
+    say(suggestedWord, state.lang);
+  }
+
+  logShiftEvent('suggestion', suggestedWord, suggestedWord, icon || '💡');
+}
+
+function renderAutocomplete(container) {
+  if (!container) return;
+  const suggestions = getWordSuggestions();
+
+  if (!suggestions.length) {
+    container.innerHTML = `<div class="autocomplete-empty">${state.lang === 'de' ? 'Tippen für Wortvorschläge…' : 'Type for word suggestions…'}</div>`;
+    return;
+  }
+
+  container.innerHTML = suggestions.map(item => `
+    <button class="suggestion-chip" onclick="handleSuggestionClick('${item.word.replace(/'/g, "\\'")}', '${item.icon || '💡'}')">
+      <span class="suggestion-icon">${item.icon || '💡'}</span>
+      <span class="suggestion-text">${item.word}</span>
+    </button>
+  `).join('');
+}
+
+function renderKeyboard(container) {
+  if (!container) return;
+  const isDe = state.lang === 'de';
+
+  const rows = isDe ? [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Ü'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö', 'Ä'],
+    ['Y', 'X', 'C', 'V', 'B', 'N', 'M', 'ß', ',', '.']
+  ] : [
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '?', ',', '.']
+  ];
+
+  let html = `<div class="kb-wrapper">`;
+
+  rows.forEach((row, rIdx) => {
+    html += `<div class="kb-row kb-row-${rIdx}">`;
+    row.forEach(k => {
+      html += `<button class="kb-key" onclick="handleKeypress('${k}', this)">${k}</button>`;
+    });
+    html += `</div>`;
+  });
+
+  const spaceLabel = isDe ? '␣ LEERTASTE' : '␣ SPACE';
+  const clearLabel = isDe ? '🗑️ LÖSCHEN' : '🗑️ CLEAR';
+  const speakLabel = isDe ? '🔊 SPRECHEN' : '🔊 SPEAK';
+
+  html += `
+    <div class="kb-row kb-row-actions">
+      <button class="kb-key kb-key-backspace" onclick="handleKeypress('⌫', this)" title="Backspace">⌫</button>
+      <button class="kb-key kb-key-space" onclick="handleKeypress('␣', this)">${spaceLabel}</button>
+      <button class="kb-key kb-key-clear" onclick="handleKeypress('clear', this)">${clearLabel}</button>
+      <button class="kb-key kb-key-speak" onclick="handleKeypress('speak', this)">${speakLabel}</button>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+function updateAllKeyboards() {
+  renderKeyboard(document.getElementById('keyboard-b'));
+  renderKeyboard(document.getElementById('keyboard-a'));
+}
+
+function updateAllAutocompletes() {
+  renderAutocomplete(document.getElementById('autocomplete-row-b'));
+  renderAutocomplete(document.getElementById('autocomplete-row-a'));
+  renderAutocomplete(document.getElementById('autocomplete-row-c'));
+}
+
 function handleKeypress(k, btnElement) {
   if (!canTap()) return;
   sound.key();
   triggerButtonTalkAnimation(btnElement);
 
   if (k === '⌫') {
-    undo();
+    if (state.quickPhrase) {
+      state.quickPhrase = null;
+    } else if (state.composing.length > 0) {
+      const last = state.composing[state.composing.length - 1];
+      if (typeof last === 'string') {
+        if (last.length > 1) {
+          state.composing[state.composing.length - 1] = last.slice(0, -1);
+        } else {
+          state.composing.pop();
+        }
+      } else {
+        state.composing.pop();
+      }
+    }
+    renderAll();
     return;
   }
-  
+
+  if (k === 'clear') {
+    clearMsg();
+    return;
+  }
+
+  if (k === 'speak') {
+    speak();
+    return;
+  }
+
   const char = k === '␣' ? ' ' : k;
   state.quickPhrase = null;
-  
+
   if (state.composing.length > 0 && typeof state.composing[state.composing.length - 1] === 'string') {
     state.composing[state.composing.length - 1] += char;
   } else {
     state.composing.push(char);
   }
+
   renderAll();
 
   // Speak letter name instantly
   if (instantTalk) {
-    say(k === '␣' ? (state.lang === 'en' ? 'Space' : 'Leertaste') : k, state.lang);
+    const spoken = k === '␣' ? (state.lang === 'en' ? 'Space' : 'Leertaste') : k;
+    say(spoken, state.lang);
   }
 }
 
@@ -2995,8 +3475,17 @@ function undo() {
   sound.undo();
   if (state.quickPhrase) {
     state.quickPhrase = null;
-  } else {
-    state.composing.pop();
+  } else if (state.composing.length > 0) {
+    const last = state.composing[state.composing.length - 1];
+    if (typeof last === 'string') {
+      if (last.length > 1) {
+        state.composing[state.composing.length - 1] = last.slice(0, -1);
+      } else {
+        state.composing.pop();
+      }
+    } else {
+      state.composing.pop();
+    }
   }
   renderAll();
 }
@@ -3049,8 +3538,8 @@ function toggleSound(btn) {
 }
 
 /* ==========================================================================
-     DOM Renderers
-     ========================================================================== */
+   DOM Renderers
+   ========================================================================== */
 function renderQuickButtons(container, actions) {
   if (!container) return;
   container.innerHTML = actions.map(raw => {
@@ -3083,10 +3572,6 @@ renderChips(document.getElementById('starters-b'), STARTERS);
 renderChips(document.getElementById('continuations-b'), CONTINUATIONS);
 renderChips(document.getElementById('starters-c'), STARTERS);
 renderChips(document.getElementById('continuations-c'), CONTINUATIONS);
-
-document.getElementById('mini-keys-b').innerHTML = MINI_KEYS.map(k =>
-  `<button class="mini-key" onclick="handleKeypress('${k}', this)">${k}</button>`
-).join('');
 
 /* Category rail for Variant C */
 const catRail = document.getElementById('cat-rail-c');
