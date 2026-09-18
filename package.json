@@ -1,0 +1,24 @@
+{
+  "name": "caretalk-bedside-aac",
+  "version": "1.0.0",
+  "description": "Bilingual, zero-friction Bedside Augmentative & Alternative Communication (AAC) speech assistant for non-verbal patients and caregivers.",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8420",
+    "serve": "npx serve -l 8420 .",
+    "dev": "python3 -m http.server 8420"
+  },
+  "keywords": [
+    "aac",
+    "caregiver",
+    "speech-synthesis",
+    "bedside-communication",
+    "web-audio-api",
+    "web-speech-api",
+    "assistive-technology",
+    "healthcare",
+    "nursing"
+  ],
+  "author": "Richard Cuyk",
+  "license": "MIT"
+}

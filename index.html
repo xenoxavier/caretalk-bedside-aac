@@ -1,0 +1,3325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareTalk — Clean AAC &amp; Instant-Talk Soundboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ==========================================================================
+     Design Tokens & Theme System
+     ========================================================================== */
+  :root {
+    --bg: #F4F6F9;
+    --surface: #FFFFFF;
+    --surface-elevated: #FFFFFF;
+    --surface-subtle: #F8FAFC;
+    --surface-card: #FFFFFF;
+    --ink: #0F172A;
+    --ink-muted: #64748B;
+    --ink-light: #94A3B8;
+    --border: #E2E8F0;
+    --border-strong: #CBD5E1;
+    
+    /* Primary Accent (Teal / Medical Calm) */
+    --primary: #0D9488;
+    --primary-hover: #0F766E;
+    --primary-light: #CCFBF1;
+    --primary-ink: #FFFFFF;
+    --primary-glow: rgba(13, 148, 136, 0.25);
+    
+    /* Alert / Emergency */
+    --alert: #E11D48;
+    --alert-hover: #BE123C;
+    --alert-light: #FFE4E6;
+    --alert-ink: #FFFFFF;
+    --alert-glow: rgba(225, 29, 72, 0.28);
+    
+    /* Fitzgerald AAC Categories - Clean, modern, distinct */
+    --cat-thing: #0284C7;
+    --cat-thing-bg: #F0F9FF;
+    --cat-thing-border: #BAE6FD;
+    
+    --cat-action: #16A34A;
+    --cat-action-bg: #F0FDF4;
+    --cat-action-border: #BBF7D0;
+    
+    --cat-comfort: #9333EA;
+    --cat-comfort-bg: #FAF5FF;
+    --cat-comfort-border: #E9D5FF;
+    
+    --cat-social: #EA580C;
+    --cat-social-bg: #FFF7ED;
+    --cat-social-border: #FED7AA;
+
+    --radius-xs: 8px;
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+    
+    --shadow-subtle: 0 1px 3px rgba(15, 23, 42, 0.05);
+    --shadow-card: 0 4px 14px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-hover: 0 10px 25px -4px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    --shadow-active: 0 2px 6px rgba(15, 23, 42, 0.08);
+    --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+
+    --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0B0F17;
+    --surface: #131B26;
+    --surface-elevated: #1B2433;
+    --surface-subtle: #161F2E;
+    --surface-card: #182232;
+    --ink: #F8FAFC;
+    --ink-muted: #94A3B8;
+    --ink-light: #64748B;
+    --border: #243042;
+    --border-strong: #334155;
+    
+    --primary: #14B8A6;
+    --primary-hover: #2DD4BF;
+    --primary-light: #134E48;
+    --primary-ink: #042F2C;
+    --primary-glow: rgba(20, 184, 166, 0.35);
+    
+    --alert: #F43F5E;
+    --alert-hover: #FB7185;
+    --alert-light: #4C0519;
+    --alert-ink: #FFFFFF;
+    --alert-glow: rgba(244, 63, 94, 0.35);
+    
+    --cat-thing: #38BDF8;
+    --cat-thing-bg: #082F49;
+    --cat-thing-border: #0369A1;
+    
+    --cat-action: #4ADE80;
+    --cat-action-bg: #052E16;
+    --cat-action-border: #15803D;
+    
+    --cat-comfort: #C084FC;
+    --cat-comfort-bg: #3B0764;
+    --cat-comfort-border: #7E22CE;
+    
+    --cat-social: #FB923C;
+    --cat-social-bg: #431407;
+    --cat-social-border: #C2410C;
+
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.6);
+  }
+
+  [data-theme="night"] {
+    --bg: #030712;
+    --surface: #090E17;
+    --surface-elevated: #111827;
+    --surface-subtle: #0D1321;
+    --surface-card: #0F172A;
+    --ink: #F3F4F6;
+    --ink-muted: #9CA3AF;
+    --ink-light: #6B7280;
+    --border: #1F2937;
+    --border-strong: #374151;
+    
+    --primary: #F59E0B;
+    --primary-hover: #D97706;
+    --primary-light: #451A03;
+    --primary-ink: #000000;
+    --primary-glow: rgba(245, 158, 11, 0.25);
+    
+    --alert: #EF4444;
+    --alert-hover: #DC2626;
+    --alert-light: #450A0A;
+    --alert-ink: #FFFFFF;
+    --alert-glow: rgba(239, 68, 68, 0.35);
+
+    --cat-thing: #38BDF8;
+    --cat-thing-bg: #0C1E34;
+    --cat-thing-border: #1E3A5F;
+    
+    --cat-action: #34D399;
+    --cat-action-bg: #06281E;
+    --cat-action-border: #0F5132;
+    
+    --cat-comfort: #F59E0B;
+    --cat-comfort-bg: #2E1A04;
+    --cat-comfort-border: #78350F;
+    
+    --cat-social: #F87171;
+    --cat-social-bg: #300C0C;
+    --cat-social-border: #7F1D1D;
+
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.7);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.85);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B0F17;
+      --surface: #131B26;
+      --surface-elevated: #1B2433;
+      --surface-subtle: #161F2E;
+      --surface-card: #182232;
+      --ink: #F8FAFC;
+      --ink-muted: #94A3B8;
+      --ink-light: #64748B;
+      --border: #243042;
+      --border-strong: #334155;
+      
+      --primary: #14B8A6;
+      --primary-hover: #2DD4BF;
+      --primary-light: #134E48;
+      --primary-ink: #042F2C;
+      --primary-glow: rgba(20, 184, 166, 0.35);
+      
+      --alert: #F43F5E;
+      --alert-hover: #FB7185;
+      --alert-light: #4C0519;
+      --alert-ink: #FFFFFF;
+      --alert-glow: rgba(244, 63, 94, 0.35);
+      
+      --cat-thing: #38BDF8;
+      --cat-thing-bg: #082F49;
+      --cat-thing-border: #0369A1;
+      
+      --cat-action: #4ADE80;
+      --cat-action-bg: #052E16;
+      --cat-action-border: #15803D;
+      
+      --cat-comfort: #C084FC;
+      --cat-comfort-bg: #3B0764;
+      --cat-comfort-border: #7E22CE;
+      
+      --cat-social: #FB923C;
+      --cat-social-bg: #431407;
+      --cat-social-border: #C2410C;
+
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 60px 16px 24px;
+    min-height: 100vh;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==========================================================================
+     Top Variant Navigation Bar
+     ========================================================================== */
+  #variant-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-subtle);
+  }
+  #variant-nav .brand-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: 0.95rem; margin-right: 8px; color: var(--primary);
+    font-family: var(--font-heading); letter-spacing: -0.01em;
+  }
+  #variant-nav .brand-badge .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+    animation: pulseDot 2s infinite ease-in-out;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 0.5; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  .variant-tab {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface-subtle);
+    color: var(--ink-muted);
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .variant-tab:hover { border-color: var(--primary); color: var(--ink); transform: translateY(-1px); }
+  .variant-tab.active {
+    background: var(--primary); color: var(--primary-ink); border-color: var(--primary);
+    box-shadow: 0 2px 10px var(--primary-glow);
+  }
+
+  .talk-mode-badge {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;
+    padding: 5px 12px; border-radius: var(--radius-full);
+    font-size: 0.78rem; font-weight: 700; font-family: var(--font-heading);
+    box-shadow: 0 1px 4px rgba(245, 158, 11, 0.15);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .talk-mode-badge:hover { transform: scale(1.03); }
+  [data-theme="dark"] .talk-mode-badge {
+    background: #451A03; color: #FDE68A; border-color: #78350F;
+  }
+
+  #info-toggle {
+    font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600;
+    border: 1px solid var(--border); background: var(--surface-subtle); color: var(--ink-muted);
+    padding: 7px 12px; border-radius: var(--radius-full); cursor: pointer; transition: all 0.15s ease;
+  }
+  #info-toggle:hover, #info-toggle.active { border-color: var(--primary); color: var(--primary); }
+  
+  #info-panel {
+    display: none;
+    position: fixed; top: 56px; right: 20px; z-index: 9997;
+    width: min(92vw, 560px);
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal); padding: 22px 26px;
+  }
+  #info-panel.open { display: block; animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  #info-panel .eyebrow {
+    font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--primary); font-weight: 700;
+  }
+  #info-panel h1 { font-family: var(--font-heading); font-size: 1.18rem; margin: 6px 0 10px; line-height: 1.35; color: var(--ink); }
+  #info-panel p { margin: 0 0 10px; color: var(--ink-muted); font-size: 0.9rem; line-height: 1.5; }
+
+  /* ==========================================================================
+     Device & Stage Presentation
+     ========================================================================== */
+  .stage {
+    max-width: 1760px; margin: 0 auto;
+    display: flex; justify-content: center; align-items: center;
+    min-height: calc(100vh - 84px);
+  }
+  .device-wrap { width: min(96vw, 100%); transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .device-wrap.vp-compact { max-width: 960px; }
+  .device-wrap.vp-compact .screen { aspect-ratio: 4 / 3; }
+  .device-wrap.vp-monitor17 { max-width: 1420px; }
+  .device-wrap.vp-monitor17 .screen { aspect-ratio: 5 / 4; }
+  .device-wrap.vp-wide { max-width: 1760px; }
+  .device-wrap.vp-wide .screen { aspect-ratio: 16 / 9; }
+
+  .device {
+    border-radius: 20px;
+    padding: 16px;
+    background: linear-gradient(160deg, #1E293B, #0F172A);
+    box-shadow: var(--shadow-modal), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+  .monitor-stand { width: 140px; height: 32px; margin: 0 auto; background: linear-gradient(160deg, #334155, #1E293B); clip-path: polygon(30% 0, 70% 0, 92% 100%, 8% 100%); }
+  .monitor-foot { width: 260px; height: 12px; margin: 0 auto 24px; background: #0F172A; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+  .screen {
+    background: var(--bg);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 0 1px var(--border) inset;
+    container-type: inline-size;
+    container-name: app;
+  }
+
+  .variant { display: none; flex-direction: column; height: 100%; }
+  .variant.active { display: flex; }
+
+  /* ==========================================================================
+     Top App Bar inside Mock Screen
+     ========================================================================== */
+  .app-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .brand-group { display: flex; align-items: center; gap: 10px; }
+  .app-logo {
+    width: 32px; height: 32px; border-radius: 10px; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    box-shadow: 0 3px 8px var(--primary-glow);
+  }
+  .app-logo svg { width: 18px; height: 18px; }
+  .wordmark { font-family: var(--font-heading); font-weight: 800; font-size: 1.05rem; color: var(--ink); letter-spacing: -0.02em; }
+  .sub-tag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--primary); font-weight: 600; text-transform: uppercase; }
+
+  .lang-toggle {
+    display: flex; background: var(--surface-subtle);
+    border: 1px solid var(--border); border-radius: var(--radius-full);
+    padding: 3px; gap: 2px;
+  }
+  .lang-toggle button {
+    font-family: var(--font-heading); font-weight: 700;
+    border: none; background: transparent; color: var(--ink-muted);
+    padding: 8px 14px; font-size: 0.84rem; border-radius: var(--radius-full);
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .lang-toggle button.active {
+    background: var(--surface); color: var(--ink);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .app-bar-actions { display: flex; align-items: center; gap: 10px; }
+
+  .pain-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--alert-light); color: var(--alert);
+    border: 2px solid var(--alert);
+    padding: 10px 18px; border-radius: var(--radius-full);
+    font-family: var(--font-heading); font-weight: 800; font-size: 0.95rem;
+    cursor: pointer; transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 3px 12px var(--alert-glow);
+  }
+  .pain-btn:hover { background: var(--alert); color: var(--alert-ink); transform: translateY(-1px) scale(1.02); }
+  .pain-btn:active { transform: scale(0.95); }
+  .pain-btn svg { width: 20px; height: 20px; animation: gentleBell 3s infinite ease-in-out; }
+  @keyframes gentleBell {
+    0%, 80%, 100% { transform: rotate(0deg); }
+    85% { transform: rotate(12deg); }
+    90% { transform: rotate(-12deg); }
+    95% { transform: rotate(8deg); }
+  }
+
+  /* ==========================================================================
+     Message Bar & Output Area
+     ========================================================================== */
+  .message-zone {
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    box-shadow: var(--shadow-subtle);
+  }
+  .msg-container {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: var(--surface-subtle); border: 2px solid var(--border);
+    border-radius: var(--radius-md); padding: 12px 18px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .msg-container.active-talking {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+  .msg-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+  .voice-wave {
+    width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; gap: 2px;
+    color: var(--primary); flex-shrink: 0;
+  }
+  .voice-wave span {
+    width: 3px; height: 6px; background: currentColor; border-radius: 2px;
+    transition: height 0.15s ease;
+  }
+  .speaking .voice-wave span:nth-child(1) { animation: waveBar 0.5s infinite alternate ease-in-out; }
+  .speaking .voice-wave span:nth-child(2) { animation: waveBar 0.5s infinite alternate 0.15s ease-in-out; }
+  .speaking .voice-wave span:nth-child(3) { animation: waveBar 0.5s infinite alternate 0.3s ease-in-out; }
+  @keyframes waveBar { 0% { height: 4px; } 100% { height: 18px; } }
+
+  .msg-display {
+    font-size: 1.35rem; line-height: 1.35;
+    color: var(--ink); font-weight: 700;
+    font-family: var(--font-body);
+    word-break: break-word;
+  }
+  .msg-display.placeholder { color: var(--ink-light); font-weight: 400; font-style: italic; }
+
+  .msg-controls { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn {
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.88rem;
+    border-radius: var(--radius-md); border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--ink);
+    padding: 10px 16px; cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: var(--shadow-subtle);
+  }
+  .btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-card); }
+  .btn:active { transform: scale(0.95); }
+
+  .btn-primary {
+    background: var(--primary); border-color: var(--primary); color: var(--primary-ink);
+    font-size: 0.98rem; padding: 10px 22px; box-shadow: 0 4px 14px var(--primary-glow);
+  }
+  .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: #fff; }
+  .btn-primary.speaking, .speak-circle.speaking {
+    animation: pulseGlow 0.6s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes pulseGlow {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 var(--primary-glow); }
+    100% { transform: scale(1.05); box-shadow: 0 0 0 14px var(--primary-glow); }
+  }
+
+  /* ==========================================================================
+     Interactive Soundboard Button Grid (Clean, Tactile & Toy-like!)
+     ========================================================================== */
+  .quick-grid {
+    flex: 1; overflow-y: auto; padding: 16px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px; align-content: start;
+  }
+  
+  /* Toy-like Tactile Button */
+  .quick-btn {
+    position: relative;
+    background: var(--surface-card);
+    border: 2px solid var(--card-border, var(--border));
+    border-radius: var(--radius-lg);
+    min-height: 118px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 14px 10px 12px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    overflow: hidden;
+  }
+  
+  /* Top tactile indicator pip */
+  .quick-btn::before {
+    content: '';
+    position: absolute; top: 8px;
+    width: 24px; height: 4px; border-radius: 4px;
+    background: var(--card-color, var(--border));
+    opacity: 0.7;
+    transition: width 0.2s ease, opacity 0.2s ease;
+  }
+
+  .quick-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--card-color);
+  }
+  .quick-btn:hover::before { width: 36px; opacity: 1; }
+
+  /* Instant Toy Press Bounce! */
+  .quick-btn:active, .quick-btn.talking-now {
+    transform: scale(0.92);
+    box-shadow: var(--shadow-active);
+    background: var(--card-bg) !important;
+  }
+
+  /* Active speaking flash ring */
+  .quick-btn.talking-now {
+    border-color: var(--card-color) !important;
+    animation: toyPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes toyPop {
+    0% { transform: scale(0.92); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+
+  .quick-btn.cat-thing {
+    --card-color: var(--cat-thing);
+    --card-bg: var(--cat-thing-bg);
+    --card-border: var(--cat-thing-border);
+  }
+  .quick-btn.cat-action {
+    --card-color: var(--cat-action);
+    --card-bg: var(--cat-action-bg);
+    --card-border: var(--cat-action-border);
+  }
+  .quick-btn.cat-comfort {
+    --card-color: var(--cat-comfort);
+    --card-bg: var(--cat-comfort-bg);
+    --card-border: var(--cat-comfort-border);
+  }
+  .quick-btn.cat-social {
+    --card-color: var(--cat-social);
+    --card-bg: var(--cat-social-bg);
+    --card-border: var(--cat-social-border);
+  }
+
+  .qb-icon-wrap {
+    width: 48px; height: 48px; border-radius: var(--radius-md);
+    background: var(--card-bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--card-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .quick-btn:hover .qb-icon-wrap { transform: scale(1.1); }
+  .qb-icon-wrap svg { width: 28px; height: 28px; }
+
+  .qb-label {
+    font-family: var(--font-heading);
+    font-size: 0.96rem; font-weight: 700; text-align: center;
+    line-height: 1.25; color: var(--ink);
+  }
+
+  .qb-speech-bubble {
+    position: absolute; bottom: 4px; right: 8px;
+    font-size: 0.7rem; opacity: 0;
+    color: var(--card-color);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(4px);
+  }
+  .quick-btn:hover .qb-speech-bubble, .quick-btn.talking-now .qb-speech-bubble {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* Smart Toggle Pill Badge on Opposite Buttons */
+  .qb-toggle-badge {
+    position: absolute; top: 7px; right: 9px;
+    font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
+    padding: 2px 7px; border-radius: var(--radius-full);
+    background: var(--surface); color: var(--card-color);
+    border: 1.5px solid var(--card-border);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex; align-items: center; gap: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .is-toggle-btn.state-1 .qb-toggle-badge {
+    background: var(--card-color); color: #FFFFFF;
+    border-color: var(--card-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .is-toggle-btn.state-1 {
+    box-shadow: 0 0 0 2px var(--card-color), var(--shadow-hover);
+  }
+
+  /* ==========================================================================
+     Word Chips & Phrase Starters
+     ========================================================================== */
+  .chip-section { margin-bottom: 12px; }
+  .chip-label {
+    font-family: var(--font-heading); font-size: 0.76rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-muted); margin: 8px 0 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.92rem;
+    background: var(--surface); border: 2px solid var(--border); color: var(--ink);
+    padding: 10px 18px; border-radius: var(--radius-full); cursor: pointer;
+    box-shadow: var(--shadow-subtle);
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chip:hover {
+    border-color: var(--primary); color: var(--primary);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-card);
+  }
+  .chip:active, .chip.talking-now {
+    transform: scale(0.93);
+    background: var(--primary-light);
+    border-color: var(--primary);
+  }
+
+  /* ==========================================================================
+     Variant A Details: Bottom Sheet Keyboard
+     ========================================================================== */
+  .v-a .keyboard-fab {
+    position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+    background: var(--ink); color: #fff; border: none;
+    padding: 12px 24px; border-radius: var(--radius-full);
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    box-shadow: var(--shadow-hover); z-index: 5;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .v-a .keyboard-fab:hover { transform: translateX(-50%) translateY(-3px) scale(1.03); }
+  .v-a .keyboard-fab:active { transform: translateX(-50%) scale(0.95); }
+
+  .v-a .keyboard-sheet {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-modal);
+    padding: 14px 20px 24px; transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 6; max-height: 80%; overflow-y: auto;
+  }
+  .v-a .keyboard-sheet.open { transform: translateY(0); }
+  .v-a .sheet-handle { width: 44px; height: 5px; background: var(--border-strong); border-radius: var(--radius-full); margin: 0 auto 12px; }
+  .v-a .sheet-close { position: absolute; top: 14px; right: 18px; background: none; border: none; color: var(--ink-muted); font-size: 1.5rem; cursor: pointer; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+  .v-a .sheet-close:hover { background: var(--surface-subtle); color: var(--ink); }
+
+  /* ==========================================================================
+     Variant B Details: Persistent Split Rail
+     ========================================================================== */
+  .v-b .main-b { flex: 1; display: flex; overflow: hidden; }
+  .v-b .grid-col { flex: 0 0 58%; display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
+  .v-b .keyboard-col { flex: 1; display: flex; flex-direction: column; padding: 18px; overflow-y: auto; background: var(--surface-subtle); }
+  .v-b .mini-keys { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-top: auto; padding-top: 14px; }
+  .v-b .mini-key {
+    background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; padding: 12px 0; cursor: pointer; color: var(--ink);
+    box-shadow: var(--shadow-subtle);
+    transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .v-b .mini-key:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+  .v-b .mini-key:active, .v-b .mini-key.talking-now { transform: scale(0.9); background: var(--primary-light); color: var(--primary-ink); }
+
+  /* ==========================================================================
+     Variant C Details: Message-First Layout
+     ========================================================================== */
+  .v-c .hero-c { display: flex; gap: 16px; align-items: stretch; padding: 18px 20px 12px; flex-shrink: 0; }
+  .v-c .msg-display-c {
+    flex: 1; background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius-lg);
+    padding: 18px 24px; font-size: 1.6rem; font-weight: 700; line-height: 1.35;
+    display: flex; align-items: center; min-height: 100px; box-shadow: var(--shadow-card);
+  }
+  .v-c .hero-actions { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .v-c .speak-circle {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: var(--primary); color: var(--primary-ink); border: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--font-heading); font-weight: 800; font-size: 0.82rem; gap: 4px;
+    cursor: pointer; box-shadow: 0 6px 20px var(--primary-glow);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .v-c .speak-circle:hover { background: var(--primary-hover); transform: scale(1.06); }
+  .v-c .speak-circle:active { transform: scale(0.93); }
+  .v-c .speak-circle svg { width: 28px; height: 28px; }
+  .v-c .mini-actions { display: flex; gap: 6px; }
+  .v-c .mini-actions .btn { padding: 8px 12px; font-size: 0.8rem; }
+  .v-c .keyboard-zone-c { padding: 8px 20px 14px; flex-shrink: 0; }
+  .v-c .category-rail {
+    display: flex; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--border);
+    background: var(--surface-subtle); flex-shrink: 0; overflow-x: auto;
+  }
+  .v-c .cat-tab {
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.88rem;
+    border: 2px solid var(--c, var(--border)); color: var(--c, var(--ink));
+    background: var(--surface); padding: 9px 16px; border-radius: var(--radius-full);
+    cursor: pointer; white-space: nowrap; transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-subtle);
+  }
+  .v-c .cat-tab:hover { transform: translateY(-2px); }
+  .v-c .cat-tab:active { transform: scale(0.95); }
+  .v-c .cat-tab.active { background: var(--c, var(--ink)); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .v-c .cat-tab[data-catkey="thing"] { --c: var(--cat-thing); }
+  .v-c .cat-tab[data-catkey="action"] { --c: var(--cat-action); }
+  .v-c .cat-tab[data-catkey="comfort"] { --c: var(--cat-comfort); }
+  .v-c .cat-tab[data-catkey="social"] { --c: var(--cat-social); }
+  .v-c .category-panel {
+    flex: 1; overflow-y: auto; padding: 14px 20px 60px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; align-content: start;
+  }
+
+  /* ==========================================================================
+     Container Query Scaling for Bedscreen Monitors
+     ========================================================================== */
+  @container app (min-width: 700px) {
+    .app-bar { padding: 16px 24px; }
+    .wordmark { font-size: 1.15rem; }
+    .pain-btn { padding: 12px 22px; font-size: 1rem; }
+    .pain-btn svg { width: 22px; height: 22px; }
+    .lang-toggle button { padding: 10px 16px; font-size: 0.88rem; }
+    .message-zone { padding: 18px 24px; }
+    .msg-display { font-size: 1.5rem; }
+    .btn { padding: 12px 20px; font-size: 0.95rem; }
+    .btn-primary { padding: 12px 26px; font-size: 1.05rem; }
+    .chip { padding: 12px 20px; font-size: 1rem; }
+    .quick-grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 16px; padding: 20px; }
+    .quick-btn { min-height: 135px; }
+    .qb-icon-wrap { width: 54px; height: 54px; }
+    .qb-icon-wrap svg { width: 32px; height: 32px; }
+    .qb-label { font-size: 1.02rem; }
+    .v-c .msg-display-c { font-size: 1.85rem; min-height: 110px; }
+    .v-c .speak-circle { width: 110px; height: 110px; font-size: 0.85rem; }
+    .v-c .speak-circle svg { width: 32px; height: 32px; }
+  }
+  @container app (min-width: 1050px) {
+    .app-bar { padding: 20px 32px; }
+    .wordmark { font-size: 1.25rem; }
+    .pain-btn { padding: 14px 28px; font-size: 1.08rem; }
+    .pain-btn svg { width: 24px; height: 24px; }
+    .message-zone { padding: 22px 32px; }
+    .msg-display { font-size: 1.8rem; }
+    .btn { padding: 14px 24px; font-size: 1.02rem; }
+    .btn-primary { padding: 15px 32px; font-size: 1.15rem; }
+    .chip { padding: 14px 24px; font-size: 1.08rem; }
+    .quick-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 26px; }
+    .quick-btn { min-height: 160px; }
+    .qb-icon-wrap { width: 62px; height: 62px; }
+    .qb-icon-wrap svg { width: 36px; height: 36px; }
+    .qb-label { font-size: 1.12rem; }
+    .v-c .hero-c { padding: 24px 32px 14px; gap: 24px; }
+    .v-c .msg-display-c { font-size: 2.2rem; min-height: 130px; }
+    .v-c .speak-circle { width: 130px; height: 130px; font-size: 0.95rem; }
+    .v-c .speak-circle svg { width: 38px; height: 38px; }
+    .v-c .category-rail { padding: 16px 32px; gap: 14px; }
+    .v-c .cat-tab { padding: 12px 22px; font-size: 1rem; }
+    .v-c .category-panel { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; padding: 20px 32px 70px; }
+    .v-b .keyboard-col { padding: 24px; }
+  }
+
+  /* ==========================================================================
+     Interactive Pain Flow Modal
+     ========================================================================== */
+  #pain-modal {
+    position: fixed; inset: 0; z-index: 9999; display: none;
+    align-items: center; justify-content: center; padding: 20px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+  }
+  #pain-modal.open { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .pain-card {
+    background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-modal);
+    border: 1px solid var(--border);
+    width: 100%; max-width: 520px; padding: 28px; position: relative; max-height: 90vh; overflow-y: auto;
+    animation: scaleModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes scaleModal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .pain-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .pain-header-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--alert-light); color: var(--alert);
+    font-family: var(--font-heading); font-weight: 800; font-size: 0.85rem;
+    padding: 6px 12px; border-radius: var(--radius-full);
+  }
+  .pain-card .step-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; margin: 0 0 16px; color: var(--ink); }
+  .pain-close {
+    background: var(--surface-subtle); border: 1px solid var(--border);
+    font-size: 1.4rem; color: var(--ink-muted); cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .pain-close:hover { background: var(--alert-light); color: var(--alert); border-color: var(--alert); }
+
+  .pain-step { display: none; }
+  .pain-step.active { display: block; }
+  .pain-loc-filter {
+    display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px;
+  }
+  .pain-filter-btn {
+    font-family: var(--font-heading); font-size: 0.78rem; font-weight: 700;
+    border: 1.5px solid var(--border); background: var(--surface-subtle); color: var(--ink-muted);
+    padding: 6px 12px; border-radius: var(--radius-full); cursor: pointer; white-space: nowrap;
+    transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .pain-filter-btn:hover, .pain-filter-btn.active {
+    border-color: var(--alert); background: var(--alert-light); color: var(--alert);
+  }
+  .pain-loc-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;
+    max-height: 50vh; overflow-y: auto; padding: 2px;
+  }
+  .pain-loc-card {
+    position: relative;
+    border: 2px solid var(--border); background: var(--surface-subtle); border-radius: var(--radius-md);
+    padding: 12px 8px; display: flex; flex-direction: column; align-items: center; text-align: center;
+    cursor: pointer; gap: 6px;
+    box-shadow: var(--shadow-subtle);
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .pain-loc-card:hover {
+    border-color: var(--alert); transform: translateY(-2px); box-shadow: var(--shadow-card);
+  }
+  .pain-loc-card:active, .pain-loc-card.talking-now {
+    transform: scale(0.92); background: var(--alert-light); border-color: var(--alert);
+  }
+  .pain-loc-card.selected {
+    border-color: var(--alert); background: var(--alert); color: #fff;
+  }
+  .pain-loc-card.selected .plc-icon {
+    background: rgba(255,255,255,0.25); color: #fff;
+  }
+  .pain-loc-card.selected .plc-sub {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .plc-icon {
+    width: 38px; height: 38px; border-radius: var(--radius-sm);
+    background: var(--surface); color: var(--alert);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .plc-icon svg { width: 22px; height: 22px; }
+  .plc-title { font-family: var(--font-heading); font-size: 0.92rem; font-weight: 700; line-height: 1.2; }
+  .plc-sub { font-size: 0.72rem; color: var(--ink-muted); line-height: 1.1; }
+  .pain-loc-btn {
+    border: 2px solid var(--border); background: var(--surface-subtle); border-radius: var(--radius-md);
+    padding: 16px 8px; font-family: var(--font-heading); font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    color: var(--ink); box-shadow: var(--shadow-subtle);
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .pain-loc-btn:hover { border-color: var(--alert); color: var(--alert); transform: translateY(-2px); }
+  .pain-loc-btn:active, .pain-loc-btn.talking-now { transform: scale(0.93); background: var(--alert-light); border-color: var(--alert); }
+  .pain-loc-btn.selected { border-color: var(--alert); background: var(--alert); color: #fff; }
+
+  .sev-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 8px 0; }
+  .sev-btn {
+    font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem;
+    border: 2px solid var(--border); background: var(--surface-subtle); color: var(--ink);
+    border-radius: var(--radius-md); padding: 14px 0; cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-subtle);
+  }
+  .sev-btn:hover { transform: translateY(-2px) scale(1.05); }
+  .sev-btn:active { transform: scale(0.9); }
+  .sev-btn.selected { color: #fff; border-color: transparent; }
+  .sev-caption { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--ink-muted); margin: 6px 0 16px; font-family: var(--font-mono); font-weight: 600; }
+
+  .pain-type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pain-review {
+    background: var(--surface-subtle); border: 2px solid var(--border); border-radius: var(--radius-md);
+    padding: 18px 20px; font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; line-height: 1.45;
+    color: var(--ink);
+  }
+  .pain-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; }
+
+  /* ==========================================================================
+     Toast Notifications
+     ========================================================================== */
+  #toast {
+    position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: #fff; padding: 12px 22px; border-radius: var(--radius-full);
+    font-family: var(--font-heading); font-size: 0.92rem; font-weight: 700; opacity: 0; pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20; white-space: nowrap; max-width: 90%; overflow: hidden; text-overflow: ellipsis;
+    box-shadow: var(--shadow-modal); display: flex; align-items: center; gap: 8px;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ==========================================================================
+     Floating Sketch Toolbar
+     ========================================================================== */
+  #sketch-tools {
+    position: fixed; bottom: 14px; right: 14px; z-index: 10000;
+    font-family: var(--font-heading); font-size: 12px; font-weight: 600;
+    background: rgba(15, 23, 42, 0.85); color: #fff; padding: 8px 12px; border-radius: var(--radius-md);
+    backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-modal); display: flex; gap: 12px; align-items: center;
+  }
+  #sketch-tools .grp { display: flex; gap: 5px; }
+  #sketch-tools button {
+    background: rgba(255,255,255,0.12); color: #fff; border: 1px solid transparent; border-radius: 6px;
+    padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.15s ease;
+  }
+  #sketch-tools button:hover { background: rgba(255,255,255,0.22); }
+  #sketch-tools button.active { background: #fff; color: #0F172A; }
+
+  /* ==========================================================================
+     Persistent Fast Response Bar (YES / NO / WAIT / THANKS)
+     ========================================================================== */
+  .fast-response-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .fast-btn {
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 10px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-subtle);
+  }
+  .fast-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-card);
+  }
+  .fast-btn:active, .fast-btn.talking-now {
+    transform: scale(0.92);
+  }
+  .fast-btn .fast-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+  .fast-btn .fast-label {
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .fast-yes {
+    background: #DCFCE7;
+    color: #15803D;
+    border-color: #86EFAC;
+  }
+  [data-theme="dark"] .fast-yes, [data-theme="night"] .fast-yes {
+    background: #052E16;
+    color: #4ADE80;
+    border-color: #16A34A;
+  }
+  .fast-yes:hover { background: #16A34A; color: #FFFFFF; border-color: #16A34A; }
+
+  .fast-no {
+    background: #FFE4E6;
+    color: #BE123C;
+    border-color: #FDA4AF;
+  }
+  [data-theme="dark"] .fast-no, [data-theme="night"] .fast-no {
+    background: #4C0519;
+    color: #FB7185;
+    border-color: #E11D48;
+  }
+  .fast-no:hover { background: #E11D48; color: #FFFFFF; border-color: #E11D48; }
+
+  .fast-wait {
+    background: #FEF3C7;
+    color: #B45309;
+    border-color: #FCD34D;
+  }
+  [data-theme="dark"] .fast-wait, [data-theme="night"] .fast-wait {
+    background: #451A03;
+    color: #FBBF24;
+    border-color: #D97706;
+  }
+  .fast-wait:hover { background: #D97706; color: #FFFFFF; border-color: #D97706; }
+
+  .fast-thanks {
+    background: #E0F2FE;
+    color: #0369A1;
+    border-color: #7DD3FC;
+  }
+  [data-theme="dark"] .fast-thanks, [data-theme="night"] .fast-thanks {
+    background: #082F49;
+    color: #38BDF8;
+    border-color: #0284C7;
+  }
+  .fast-thanks:hover { background: #0284C7; color: #FFFFFF; border-color: #0284C7; }
+
+  /* ==========================================================================
+     Call Bell & Emergency Alert Banner
+     ========================================================================== */
+  .call-bell-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--alert);
+    color: #FFFFFF;
+    border: 2px solid var(--alert);
+    padding: 9px 16px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.92rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--alert-glow);
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .call-bell-btn:hover {
+    background: var(--alert-hover);
+    transform: translateY(-2px) scale(1.03);
+  }
+  .call-bell-btn:active {
+    transform: scale(0.94);
+  }
+  .call-bell-btn svg {
+    width: 19px;
+    height: 19px;
+    animation: gentleBell 2.5s infinite ease-in-out;
+  }
+
+  .call-bell-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: linear-gradient(135deg, #DC2626, #991B1B);
+    color: #FFFFFF;
+    padding: 14px 20px;
+    z-index: 50;
+    display: none;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.5);
+    animation: alertSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1), alertFlash 1s infinite alternate ease-in-out;
+  }
+  .call-bell-overlay.active {
+    display: block;
+  }
+  @keyframes alertSlideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes alertFlash {
+    0% { background: linear-gradient(135deg, #DC2626, #991B1B); }
+    100% { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+  }
+  .call-bell-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .cb-alert-icon {
+    font-size: 2rem;
+    animation: bounce 0.6s infinite alternate;
+  }
+  @keyframes bounce {
+    from { transform: scale(0.9); }
+    to { transform: scale(1.2); }
+  }
+  .cb-alert-info { flex: 1; }
+  .cb-alert-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .cb-alert-sub {
+    font-size: 0.85rem;
+    opacity: 0.92;
+    font-family: var(--font-body);
+  }
+  .cb-dismiss-btn {
+    background: #FFFFFF;
+    color: #B91C1C;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 9px 20px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.92rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: all 0.15s ease;
+  }
+  .cb-dismiss-btn:hover {
+    transform: scale(1.05);
+    background: #FEE2E2;
+  }
+
+  /* ==========================================================================
+     Shift Log Drawer & Bedside Clock
+     ========================================================================== */
+  .log-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-subtle);
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .log-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .log-badge {
+    background: var(--primary);
+    color: var(--primary-ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+  }
+  .night-toggle-btn {
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .night-toggle-btn:hover {
+    transform: scale(1.08);
+    border-color: var(--primary);
+  }
+  .bedside-clock {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  [data-theme="night"] .bedside-clock {
+    color: #F59E0B;
+    border-color: #78350F;
+    background: #1C1203;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+  }
+
+  /* Shift Log Drawer */
+  .shift-log-drawer {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    justify-content: flex-end;
+  }
+  .shift-log-drawer.open {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+  }
+  .shift-log-panel {
+    width: min(92vw, 480px);
+    height: 100%;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-modal);
+    display: flex;
+    flex-direction: column;
+    animation: slideLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideLeft {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  .shift-log-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .shift-log-title-grp {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .shift-log-icon { font-size: 1.5rem; }
+  .shift-log-header h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+  .shift-log-sub {
+    font-size: 0.76rem;
+    color: var(--ink-muted);
+  }
+  .drawer-close-btn {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 1.3rem;
+    color: var(--ink-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .drawer-close-btn:hover {
+    background: var(--alert-light);
+    color: var(--alert);
+  }
+  .shift-log-toolbar {
+    padding: 10px 22px;
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+  }
+  .shift-log-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn-sm {
+    font-family: var(--font-heading);
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-sm:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .shift-log-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .shift-log-empty {
+    text-align: center;
+    color: var(--ink-muted);
+    padding: 40px 20px;
+    font-size: 0.92rem;
+  }
+  .shift-item {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    transition: transform 0.15s ease;
+  }
+  .shift-item:hover {
+    transform: translateX(-2px);
+    border-color: var(--border-strong);
+  }
+  .shift-item.is-call {
+    background: #FFF1F2;
+    border-color: #FDA4AF;
+  }
+  [data-theme="dark"] .shift-item.is-call, [data-theme="night"] .shift-item.is-call {
+    background: #4C0519;
+    border-color: #E11D48;
+  }
+  .shift-item.is-pain {
+    background: #FEF2F2;
+    border-color: #FECACA;
+  }
+  [data-theme="dark"] .shift-item.is-pain, [data-theme="night"] .shift-item.is-pain {
+    background: #3B0D0C;
+    border-color: #991B1B;
+  }
+  .shift-item-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .shift-item-body {
+    flex: 1;
+  }
+  .shift-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .shift-item-title {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .shift-item-time {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .shift-item-spoken {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    line-height: 1.35;
+  }
+
+  @container app (min-width: 700px) {
+    .fast-response-bar { padding: 12px 24px; gap: 12px; }
+    .fast-btn { padding: 14px 10px; gap: 4px; }
+    .fast-btn .fast-icon { font-size: 1.6rem; }
+    .fast-btn .fast-label { font-size: 0.95rem; }
+    .call-bell-btn { padding: 11px 20px; font-size: 0.98rem; }
+    .log-btn { padding: 10px 16px; font-size: 0.9rem; }
+    .bedside-clock { font-size: 0.98rem; padding: 8px 12px; }
+  }
+
+  /* ==========================================================================
+     Voice & Speaker Settings Dialog
+     ========================================================================== */
+  .voice-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .voice-modal.open {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+  }
+  .voice-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    animation: scaleModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .voice-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .voice-title-grp {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .voice-icon { font-size: 1.6rem; }
+  .voice-header h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+  .voice-sub {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+  }
+  .voice-body {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .voice-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .voice-section-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .voice-select-row {
+    display: flex;
+    gap: 10px;
+  }
+  .voice-select {
+    flex: 1;
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .voice-select:focus {
+    border-color: var(--primary);
+  }
+  .btn-test-voice {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.88rem;
+    background: var(--primary);
+    color: var(--primary-ink);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 10px 18px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .btn-test-voice:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+  .slider-group {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .slider-row label {
+    font-family: var(--font-heading);
+    font-size: 0.84rem;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+  }
+  .slider-row input[type="range"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+    width: 100%;
+  }
+  .voice-guide-box {
+    background: #F0FDF4;
+    border: 1.5px solid #BBF7D0;
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    color: #14532D;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  [data-theme="dark"] .voice-guide-box, [data-theme="night"] .voice-guide-box {
+    background: #052E16;
+    border-color: #16A34A;
+    color: #DCFCE7;
+  }
+  .guide-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+  }
+  .voice-guide-box ul {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .voice-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-subtle);
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .voice-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 600px) {
+    body { padding-top: 156px; }
+    #variant-nav { flex-direction: column; align-items: stretch; gap: 8px; }
+    .talk-mode-badge { margin-left: 0; justify-content: center; }
+    #info-panel { top: 164px; right: 14px; left: 14px; width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     Top Chrome / Variant Navigation
+     ========================================================================== -->
+<div id="variant-nav">
+  <div class="brand-badge">
+    <span class="dot"></span>
+    <span>CareTalk AAC</span>
+  </div>
+  <button class="variant-tab active" onclick="showVariant('a', event)">A: Bar &amp; Grid</button>
+  <button class="variant-tab" onclick="showVariant('b', event)">B: Split Rail</button>
+  <button class="variant-tab" onclick="showVariant('c', event)">C: Message-First</button>
+  
+  <div class="talk-mode-badge" onclick="toggleInstantTalk()" title="Click to toggle instant soundboard mode">
+    <span>🧸 Instant Talk:</span>
+    <strong id="instant-talk-status">ON (Toy Mode)</strong>
+  </div>
+
+  <button id="info-toggle" onclick="toggleInfo()" aria-expanded="false" aria-controls="info-panel">ⓘ About</button>
+</div>
+
+<!-- Info Drawer -->
+<div id="info-panel">
+  <div class="eyebrow">Interactive Bedside AAC Prototype</div>
+  <h1>Instant Talk &amp; Clean Tactile AAC Interface</h1>
+  <p>CareTalk features <strong>Instant Talk feedback</strong> (like an interactive learning toy / soundboard): whenever any button, word chip, or pain indicator is pressed, the device speaks out the word or phrase immediately via Web Speech synthesis, giving instant reassurance and communication power to the patient.</p>
+  <p>The UI has been refined with modern, clean, high-contrast tactile cards with Fitzgerald AAC category color-coding, Atkinson Hyperlegible typography, and responsive container scaling for fixed bedside monitors.</p>
+</div>
+
+<!-- ==========================================================================
+     Main Device Presentation Frame
+     ========================================================================== -->
+<div class="stage">
+  <div class="device-wrap vp-monitor17" id="device-wrap">
+    <div class="device">
+      <div class="screen">
+
+        <!-- ============ Emergency Call Bell Overlay Banner ============ -->
+        <div id="call-bell-overlay" class="call-bell-overlay">
+          <div class="call-bell-banner">
+            <div class="cb-alert-icon">🚨</div>
+            <div class="cb-alert-info">
+              <div class="cb-alert-title" data-i18n="callActiveTitle">EMERGENCY CALL ACTIVE / NOTRUF AKTIV</div>
+              <div class="cb-alert-sub" data-i18n="callActiveSub">Caregiver notified • High-priority alert broadcast</div>
+            </div>
+            <button class="cb-dismiss-btn" onclick="dismissCallBell()">
+              <span data-i18n="callDismiss">✓ I AM HERE / ANWESEND</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ============ VARIANT A: Bar & Grid ============ -->
+        <div class="variant active v-a" id="variant-a">
+          <div class="app-bar">
+            <div class="brand-group">
+              <div class="app-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5 5l14 14M19 5L5 19"/></svg>
+              </div>
+              <div>
+                <div class="wordmark">CareTalk</div>
+                <div class="sub-tag" data-i18n="tagline">Bedside AAC</div>
+              </div>
+            </div>
+
+            <div class="lang-toggle">
+              <button data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+              <button data-lang="de" onclick="setLang('de')">🇩🇪 DE</button>
+            </div>
+
+            <div class="app-bar-actions">
+              <div class="bedside-clock" title="Bedside Clock">--:--</div>
+              <button class="voice-btn" onclick="openVoiceSettings()" title="Voice & Speaker Studio">
+                <span>🎙️</span>
+                <span data-i18n="voiceBtn">Voice</span>
+              </button>
+              <button class="night-toggle-btn" onclick="toggleNightMode()" title="Toggle Night Mode">🌙</button>
+              <button class="log-btn" onclick="toggleShiftLog()" title="Caregiver Shift Log">
+                <span>📋</span>
+                <span data-i18n="shiftLog">Log</span>
+                <span class="log-badge" id="shift-log-badge">0</span>
+              </button>
+              <button class="call-bell-btn" onclick="triggerCallBell()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="callBell">NOTRUF</span>
+              </button>
+              <button class="pain-btn" onclick="openPain()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="pain">PAIN</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Persistent Fast Response Bar -->
+          <div class="fast-response-bar">
+            <button class="fast-btn fast-yes" onclick="handleFast('yes', this)">
+              <span class="fast-icon">✓</span>
+              <span class="fast-label" data-i18n="fastYes">YES / JA</span>
+            </button>
+            <button class="fast-btn fast-no" onclick="handleFast('no', this)">
+              <span class="fast-icon">✕</span>
+              <span class="fast-label" data-i18n="fastNo">NO / NEIN</span>
+            </button>
+            <button class="fast-btn fast-wait" onclick="handleFast('wait', this)">
+              <span class="fast-icon">⏳</span>
+              <span class="fast-label" data-i18n="fastWait">WAIT / WARTEN</span>
+            </button>
+            <button class="fast-btn fast-thanks" onclick="handleFast('thanks', this)">
+              <span class="fast-icon">💙</span>
+              <span class="fast-label" data-i18n="fastThanks">THANKS / DANKE</span>
+            </button>
+          </div>
+
+          <div class="message-zone">
+            <div class="msg-container" id="msg-box-a">
+              <div class="msg-left">
+                <div class="voice-wave" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="msg-display placeholder" data-i18n-ph="placeholder">Tap any button to talk immediately…</div>
+              </div>
+              <div class="msg-controls">
+                <button class="btn" onclick="undo()" title="Undo last word"><span data-i18n="undo">Undo</span></button>
+                <button class="btn" onclick="clearMsg()" title="Clear message"><span data-i18n="clear">Clear</span></button>
+                <button class="btn btn-primary speak-btn" onclick="speak()" title="Repeat message aloud">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                  <span data-i18n="speak">SPEAK</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-grid" id="grid-a"></div>
+
+          <button class="keyboard-fab" onclick="toggleSheet(true)">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
+            <span data-i18n="typeCta">Build a Sentence</span>
+          </button>
+
+          <div class="keyboard-sheet" id="sheet-a">
+            <button class="sheet-close" onclick="toggleSheet(false)">&times;</button>
+            <div class="sheet-handle"></div>
+            <div class="chip-section">
+              <div class="chip-label">✨ <span data-i18n="langLabel">Starters</span></div>
+              <div class="chip-row" id="starters-a"></div>
+            </div>
+            <div class="chip-section">
+              <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
+              <div class="chip-row" id="continuations-a"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ VARIANT B: Split Rail ============ -->
+        <div class="variant v-b" id="variant-b">
+          <div class="app-bar">
+            <div class="brand-group">
+              <div class="app-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5 5l14 14M19 5L5 19"/></svg>
+              </div>
+              <div>
+                <div class="wordmark">CareTalk</div>
+                <div class="sub-tag" data-i18n="tagline">Bedside AAC</div>
+              </div>
+            </div>
+
+            <div class="lang-toggle">
+              <button data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+              <button data-lang="de" onclick="setLang('de')">🇩🇪 DE</button>
+            </div>
+
+            <div class="app-bar-actions">
+              <div class="bedside-clock" title="Bedside Clock">--:--</div>
+              <button class="voice-btn" onclick="openVoiceSettings()" title="Voice & Speaker Studio">
+                <span>🎙️</span>
+                <span data-i18n="voiceBtn">Voice</span>
+              </button>
+              <button class="night-toggle-btn" onclick="toggleNightMode()" title="Toggle Night Mode">🌙</button>
+              <button class="log-btn" onclick="toggleShiftLog()" title="Caregiver Shift Log">
+                <span>📋</span>
+                <span data-i18n="shiftLog">Log</span>
+                <span class="log-badge">0</span>
+              </button>
+              <button class="call-bell-btn" onclick="triggerCallBell()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="callBell">NOTRUF</span>
+              </button>
+              <button class="pain-btn" onclick="openPain()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="pain">PAIN</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Persistent Fast Response Bar -->
+          <div class="fast-response-bar">
+            <button class="fast-btn fast-yes" onclick="handleFast('yes', this)">
+              <span class="fast-icon">✓</span>
+              <span class="fast-label" data-i18n="fastYes">YES / JA</span>
+            </button>
+            <button class="fast-btn fast-no" onclick="handleFast('no', this)">
+              <span class="fast-icon">✕</span>
+              <span class="fast-label" data-i18n="fastNo">NO / NEIN</span>
+            </button>
+            <button class="fast-btn fast-wait" onclick="handleFast('wait', this)">
+              <span class="fast-icon">⏳</span>
+              <span class="fast-label" data-i18n="fastWait">WAIT / WARTEN</span>
+            </button>
+            <button class="fast-btn fast-thanks" onclick="handleFast('thanks', this)">
+              <span class="fast-icon">💙</span>
+              <span class="fast-label" data-i18n="fastThanks">THANKS / DANKE</span>
+            </button>
+          </div>
+
+          <div class="main-b">
+            <div class="grid-col">
+              <div class="quick-grid" id="grid-b"></div>
+            </div>
+            <div class="keyboard-col">
+              <div class="chip-section">
+                <div class="chip-label">✨ <span data-i18n="langLabel">Starters</span></div>
+                <div class="chip-row" id="starters-b"></div>
+              </div>
+              <div class="chip-section">
+                <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
+                <div class="chip-row" id="continuations-b"></div>
+              </div>
+              <div class="chip-label" style="margin-top:auto;">⌨️ <span data-i18n="talkingKeys">Talking Keyboard</span></div>
+              <div class="mini-keys" id="mini-keys-b"></div>
+            </div>
+          </div>
+
+          <div class="message-zone">
+            <div class="msg-container" id="msg-box-b">
+              <div class="msg-left">
+                <div class="voice-wave" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="msg-display placeholder" data-i18n-ph="placeholder">Tap any button to talk immediately…</div>
+              </div>
+              <div class="msg-controls">
+                <button class="btn" onclick="undo()"><span data-i18n="undo">Undo</span></button>
+                <button class="btn" onclick="clearMsg()"><span data-i18n="clear">Clear</span></button>
+                <button class="btn btn-primary speak-btn" onclick="speak()">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                  <span data-i18n="speak">SPEAK</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ VARIANT C: Message-First ============ -->
+        <div class="variant v-c" id="variant-c">
+          <div class="app-bar">
+            <div class="brand-group">
+              <div class="app-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5 5l14 14M19 5L5 19"/></svg>
+              </div>
+              <div>
+                <div class="wordmark">CareTalk</div>
+                <div class="sub-tag" data-i18n="tagline">Bedside AAC</div>
+              </div>
+            </div>
+
+            <div class="lang-toggle">
+              <button data-lang="en" onclick="setLang('en')">🇬🇧 EN</button>
+              <button data-lang="de" onclick="setLang('de')">🇩🇪 DE</button>
+            </div>
+
+            <div class="app-bar-actions">
+              <div class="bedside-clock" title="Bedside Clock">--:--</div>
+              <button class="voice-btn" onclick="openVoiceSettings()" title="Voice & Speaker Studio">
+                <span>🎙️</span>
+                <span data-i18n="voiceBtn">Voice</span>
+              </button>
+              <button class="night-toggle-btn" onclick="toggleNightMode()" title="Toggle Night Mode">🌙</button>
+              <button class="log-btn" onclick="toggleShiftLog()" title="Caregiver Shift Log">
+                <span>📋</span>
+                <span data-i18n="shiftLog">Log</span>
+                <span class="log-badge">0</span>
+              </button>
+              <button class="call-bell-btn" onclick="triggerCallBell()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="callBell">NOTRUF</span>
+              </button>
+              <button class="pain-btn" onclick="openPain()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span data-i18n="pain">PAIN</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Persistent Fast Response Bar -->
+          <div class="fast-response-bar">
+            <button class="fast-btn fast-yes" onclick="handleFast('yes', this)">
+              <span class="fast-icon">✓</span>
+              <span class="fast-label" data-i18n="fastYes">YES / JA</span>
+            </button>
+            <button class="fast-btn fast-no" onclick="handleFast('no', this)">
+              <span class="fast-icon">✕</span>
+              <span class="fast-label" data-i18n="fastNo">NO / NEIN</span>
+            </button>
+            <button class="fast-btn fast-wait" onclick="handleFast('wait', this)">
+              <span class="fast-icon">⏳</span>
+              <span class="fast-label" data-i18n="fastWait">WAIT / WARTEN</span>
+            </button>
+            <button class="fast-btn fast-thanks" onclick="handleFast('thanks', this)">
+              <span class="fast-icon">💙</span>
+              <span class="fast-label" data-i18n="fastThanks">THANKS / DANKE</span>
+            </button>
+          </div>
+
+          <div class="hero-c">
+            <div class="msg-display-c placeholder" data-i18n-ph="placeholder">Tap any button to talk immediately…</div>
+            <div class="hero-actions">
+              <button class="speak-circle speak-btn" onclick="speak()" title="Repeat speech aloud">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <span data-i18n="speak">SPEAK</span>
+              </button>
+              <div class="mini-actions">
+                <button class="btn" onclick="undo()"><span data-i18n="undo">Undo</span></button>
+                <button class="btn" onclick="clearMsg()"><span data-i18n="clear">Clear</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="keyboard-zone-c">
+            <div class="chip-section" style="margin-bottom:6px;">
+              <div class="chip-label">✨ <span data-i18n="langLabel">Starters</span></div>
+              <div class="chip-row" id="starters-c"></div>
+            </div>
+            <div class="chip-section">
+              <div class="chip-label">💬 <span data-i18n="continueLabel">Continue with…</span></div>
+              <div class="chip-row" id="continuations-c"></div>
+            </div>
+          </div>
+
+          <div class="category-rail" id="cat-rail-c"></div>
+          <div class="category-panel" id="cat-panel-c">
+            <div class="category-hint" data-i18n="chooseCategory">Choose a category</div>
+          </div>
+        </div>
+
+        <div id="toast">🔊 <span>Spoken</span></div>
+      </div>
+    </div>
+    <div class="monitor-stand"></div>
+    <div class="monitor-foot"></div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Shared PAIN Flow Modal
+     ========================================================================== -->
+<div id="pain-modal">
+  <div class="pain-card">
+    <div class="pain-header">
+      <div class="pain-header-badge">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <span data-i18n="painAssessment">Pain Assessment</span>
+      </div>
+      <button class="pain-close" onclick="closePain()">&times;</button>
+    </div>
+
+    <div class="pain-step active" data-step="0">
+      <div class="step-title" data-i18n="painTitle">Where does it hurt?</div>
+      <div class="pain-loc-filter" id="pain-loc-filters">
+        <button class="pain-filter-btn active" onclick="filterPainLocs('all', this)"><span>🌐</span> <span data-i18n="allParts">All Parts</span></button>
+        <button class="pain-filter-btn" onclick="filterPainLocs('head', this)"><span>🧠</span> <span data-i18n="headFace">Head &amp; Face</span></button>
+        <button class="pain-filter-btn" onclick="filterPainLocs('torso', this)"><span>🫀</span> <span data-i18n="torsoBack">Chest &amp; Back</span></button>
+        <button class="pain-filter-btn" onclick="filterPainLocs('limbs', this)"><span>🦵</span> <span data-i18n="armsLegs">Arms &amp; Legs</span></button>
+      </div>
+      <div class="pain-loc-grid" id="pain-locations"></div>
+    </div>
+
+    <div class="pain-step" data-step="1">
+      <div class="step-title" data-i18n="painSeverity">How bad is it?</div>
+      <div class="sev-grid" id="sev-grid-1"></div>
+      <div class="sev-grid" id="sev-grid-2" style="margin-top:-2px;"></div>
+      <div class="sev-caption">
+        <span style="color: #16A34A;">🟢 1 (Mild)</span>
+        <span style="color: #E11D48;">🔴 10 (Severe)</span>
+      </div>
+    </div>
+
+    <div class="pain-step" data-step="2">
+      <div class="step-title" data-i18n="painType">What kind of pain?</div>
+      <div class="pain-type-grid" id="pain-types"></div>
+    </div>
+
+    <div class="pain-step" data-step="3">
+      <div class="step-title" data-i18n="painGenerate">Generate &amp; Speak</div>
+      <div class="pain-review" id="pain-review"></div>
+    </div>
+
+    <div class="pain-nav">
+      <button class="btn" id="pain-back" onclick="painBack()" data-i18n="painBack">Back</button>
+      <button class="btn" id="pain-skip" onclick="painSkipType()" data-i18n="painSkip">Skip</button>
+      <button class="btn btn-primary" id="pain-next" onclick="painNext()" data-i18n="painNext">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Caregiver Shift Log Drawer Modal
+     ========================================================================== -->
+<div id="shift-log-drawer" class="shift-log-drawer">
+  <div class="shift-log-panel">
+    <div class="shift-log-header">
+      <div class="shift-log-title-grp">
+        <span class="shift-log-icon">📋</span>
+        <div>
+          <h2 data-i18n="shiftLogTitle">Caregiver Shift Log</h2>
+          <div class="shift-log-sub" data-i18n="shiftLogSub">Chronological communication &amp; requests</div>
+        </div>
+      </div>
+      <button class="drawer-close-btn" onclick="toggleShiftLog()">&times;</button>
+    </div>
+
+    <div class="shift-log-toolbar">
+      <span class="shift-log-count"><strong id="log-count-text">0 entries</strong></span>
+      <div class="shift-log-actions">
+        <button class="btn-sm" onclick="clearShiftLog()" data-i18n="clearLog">Clear Log</button>
+        <button class="btn-sm" onclick="exportShiftLog()" data-i18n="exportLog">Copy Log</button>
+      </div>
+    </div>
+
+    <div class="shift-log-list" id="shift-log-list">
+      <div class="shift-log-empty" data-i18n="emptyLog">No requests logged yet. Tap any button or soundboard item to start communicating.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Voice & Speaker Customization Studio
+     ========================================================================== -->
+<div id="voice-modal" class="voice-modal" onclick="if(event.target===this) closeVoiceSettings()">
+  <div class="voice-card">
+    <div class="voice-header">
+      <div class="voice-title-grp">
+        <span class="voice-icon">🎙️</span>
+        <div>
+          <h2 data-i18n="voiceStudioTitle">Voice &amp; Speaker Settings</h2>
+          <div class="voice-sub" data-i18n="voiceStudioSub">Select natural voices, pitch &amp; speech rate (100% Free)</div>
+        </div>
+      </div>
+      <button class="drawer-close-btn" onclick="closeVoiceSettings()">&times;</button>
+    </div>
+
+    <div class="voice-body">
+      <!-- German Voice Selection -->
+      <div class="voice-section">
+        <div class="voice-section-title">
+          <span>🇩🇪 <span data-i18n="voiceGerman">German Voice (Deutsch)</span></span>
+        </div>
+        <div class="voice-select-row">
+          <select id="voice-select-de" class="voice-select" onchange="onVoiceChange('de', this.value)">
+            <option value="">Detecting natural voices…</option>
+          </select>
+          <button class="btn-test-voice" onclick="testVoice('de')" data-i18n="testVoiceBtn">▶ Test</button>
+        </div>
+      </div>
+
+      <!-- English Voice Selection -->
+      <div class="voice-section">
+        <div class="voice-section-title">
+          <span>🇬🇧 <span data-i18n="voiceEnglish">English Voice</span></span>
+        </div>
+        <div class="voice-select-row">
+          <select id="voice-select-en" class="voice-select" onchange="onVoiceChange('en', this.value)">
+            <option value="">Detecting natural voices…</option>
+          </select>
+          <button class="btn-test-voice" onclick="testVoice('en')" data-i18n="testVoiceBtn">▶ Test</button>
+        </div>
+      </div>
+
+      <!-- Cadence & Tone Fine-tuning -->
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>
+            <span data-i18n="speechSpeed">Speech Speed (Rate)</span>
+            <span id="speed-val" style="font-weight:700; color:var(--primary);">0.92x</span>
+          </label>
+          <input type="range" id="voice-speed" min="0.6" max="1.4" step="0.02" value="0.92" oninput="onSpeedChange(this.value)">
+        </div>
+        <div class="slider-row">
+          <label>
+            <span data-i18n="speechPitch">Voice Pitch (Tone Warmth)</span>
+            <span id="pitch-val" style="font-weight:700; color:var(--primary);">1.00x</span>
+          </label>
+          <input type="range" id="voice-pitch" min="0.7" max="1.3" step="0.05" value="1.00" oninput="onPitchChange(this.value)">
+        </div>
+      </div>
+
+      <!-- Free Enhanced Voice Guide -->
+      <div class="voice-guide-box">
+        <div class="guide-title">💡 How to unlock 100% Free Ultra-Natural Voices:</div>
+        <ul>
+          <li><strong>On Mac / iPad (Best Quality)</strong>: Open <em>System Settings → Accessibility → Spoken Content → System Voice → Manage Voices</em> and download <strong>Anna (Enhanced)</strong>, <strong>Markus (Enhanced)</strong>, or <strong>Siri</strong>.</li>
+          <li><strong>In Google Chrome</strong>: Built-in free natural voices (<em>Google Deutsch</em> &amp; <em>Google US English</em>) are automatically available in the dropdowns above.</li>
+          <li><strong>In Microsoft Edge</strong>: Built-in free neural voices (<em>Microsoft Stefan / Jenny Online</em>) are enabled by default.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Sketch Toolbar
+     ========================================================================== -->
+<div id="sketch-tools">
+  <div class="grp">
+    <button onclick="setViewport('compact', this)">13″</button>
+    <button onclick="setViewport('monitor17', this)" class="active">17″</button>
+    <button onclick="setViewport('wide', this)">Wide</button>
+  </div>
+  <div class="grp">
+    <button onclick="setTheme('light', this)">Light</button>
+    <button onclick="setTheme('dark', this)">Dark</button>
+    <button onclick="setTheme('night', this)">🌙 Night</button>
+    <button onclick="setTheme('system', this)" class="active">Auto</button>
+  </div>
+  <div class="grp">
+    <button onclick="toggleSound(this)" id="sound-btn" class="active">🔊 Sound</button>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     Application Logic & Instant Talk Speech Synthesis
+     ========================================================================== -->
+<script>
+/* ==========================================================================
+   Anti-Tremor Debounce & Touch Guard
+   ========================================================================== */
+let lastTapTime = 0;
+const DEBOUNCE_MS = 220;
+
+function canTap() {
+  const now = Date.now();
+  if (now - lastTapTime < DEBOUNCE_MS) return false;
+  lastTapTime = now;
+  return true;
+}
+
+/* Audio & Instant Talk Configuration */
+let soundOn = true;
+let instantTalk = true;
+let audioCtx = null;
+
+function ctx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+/* Synthesizer Tone Chimes for Playful / Tactile Soundboard Feel */
+function tone(freq, { type = 'sine', duration = 0.1, gain = 0.18, delay = 0, glideTo = null } = {}) {
+  if (!soundOn) return;
+  try {
+    const c = ctx();
+    const isNight = document.documentElement.getAttribute('data-theme') === 'night';
+    const finalGain = isNight ? gain * 0.55 : gain; // Gentle lower volume during night mode
+    const t0 = c.currentTime + delay;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    if (glideTo) osc.frequency.exponentialRampToValueAtTime(glideTo, t0 + duration);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(finalGain, t0 + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.connect(g); g.connect(c.destination);
+    osc.start(t0); osc.stop(t0 + duration + 0.03);
+  } catch (e) {}
+}
+
+const NOTE = { thing: 659.25, action: 523.25, comfort: 880.0, social: 783.99 };
+const sound = {
+  toyPop(cat) {
+    const f = NOTE[cat] || 523.25;
+    tone(f * 0.8, { type: 'triangle', duration: 0.06, gain: 0.16 });
+    tone(f, { type: 'sine', duration: 0.12, delay: 0.04, gain: 0.2 });
+  },
+  chip()   { tone(659.25, { type: 'triangle', duration: 0.08, gain: 0.14 }); },
+  lang()   { tone(440, { type: 'triangle', duration: 0.08, glideTo: 587, gain: 0.15 }); },
+  undo()   { tone(660, { type: 'sine', duration: 0.1, glideTo: 440, gain: 0.14 }); },
+  clear()  { tone(523, { type: 'sine', duration: 0.15, glideTo: 220, gain: 0.14 }); },
+  open()   { tone(392, { type: 'triangle', duration: 0.09, glideTo: 523, gain: 0.12 }); },
+  close()  { tone(440, { type: 'triangle', duration: 0.08, glideTo: 330, gain: 0.1 }); },
+  select() { tone(740, { type: 'sine', duration: 0.08, gain: 0.15 }); },
+  alert()  {
+    tone(880, { type: 'sine', duration: 0.12, gain: 0.2 });
+    tone(659, { type: 'sine', duration: 0.16, gain: 0.2, delay: 0.12 });
+  },
+  severity(n) { tone(400 + n * 45, { type: 'sine', duration: 0.09, gain: 0.12 + n * 0.008 }); },
+  confirm() {
+    tone(523.25, { type: 'sine', duration: 0.09, gain: 0.16 });
+    tone(783.99, { type: 'sine', duration: 0.16, gain: 0.18, delay: 0.08 });
+  },
+  key()    { tone(880, { type: 'triangle', duration: 0.04, gain: 0.1 }); },
+  fastYes() {
+    tone(523.25, { type: 'sine', duration: 0.08, gain: 0.18 });
+    tone(659.25, { type: 'sine', duration: 0.08, delay: 0.06, gain: 0.18 });
+    tone(783.99, { type: 'sine', duration: 0.14, delay: 0.12, gain: 0.2 });
+  },
+  fastNo() {
+    tone(440, { type: 'sine', duration: 0.1, gain: 0.18 });
+    tone(330, { type: 'sine', duration: 0.14, delay: 0.07, gain: 0.18 });
+  },
+  fastWait() {
+    tone(587.33, { type: 'triangle', duration: 0.06, gain: 0.14 });
+    tone(587.33, { type: 'triangle', duration: 0.08, delay: 0.1, gain: 0.14 });
+  },
+  fastThanks() {
+    tone(523.25, { type: 'sine', duration: 0.07, gain: 0.15 });
+    tone(659.25, { type: 'sine', duration: 0.07, delay: 0.05, gain: 0.15 });
+    tone(880.0,  { type: 'sine', duration: 0.15, delay: 0.1, gain: 0.18 });
+  },
+  nurseBell() {
+    if (!soundOn) return;
+    const isNight = document.documentElement.getAttribute('data-theme') === 'night';
+    const vol = isNight ? 0.22 : 0.38;
+    tone(880, { type: 'sine', duration: 0.24, gain: vol });
+    tone(1318.5, { type: 'sine', duration: 0.45, delay: 0.18, gain: vol });
+    tone(880, { type: 'sine', duration: 0.24, delay: 0.65, gain: vol });
+    tone(1318.5, { type: 'sine', duration: 0.55, delay: 0.83, gain: vol });
+  }
+};
+
+/* ==========================================================================
+   Voice & Speaker Studio Engine
+   ========================================================================== */
+let activeUtterance = null;
+let cachedVoices = [];
+let customVoiceSettings = {
+  de: localStorage.getItem('caretalk_voice_de') || '',
+  en: localStorage.getItem('caretalk_voice_en') || '',
+  speed: parseFloat(localStorage.getItem('caretalk_speed')) || 0.92,
+  pitch: parseFloat(localStorage.getItem('caretalk_pitch')) || 1.00
+};
+
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  cachedVoices = window.speechSynthesis.getVoices();
+  populateVoiceSelectors();
+}
+
+if ('speechSynthesis' in window) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function getBestVoice(lang) {
+  if (!cachedVoices.length) loadVoices();
+  const targetPrefix = lang === 'de' ? 'de' : 'en';
+  const matching = cachedVoices.filter(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith(targetPrefix));
+  if (!matching.length) return null;
+
+  // 1. Check if user selected a custom voice
+  const userChoiceUri = lang === 'de' ? customVoiceSettings.de : customVoiceSettings.en;
+  if (userChoiceUri) {
+    const userVoice = matching.find(v => v.voiceURI === userChoiceUri || v.name === userChoiceUri);
+    if (userVoice) return userVoice;
+  }
+
+  // 2. Otherwise auto-select the highest quality natural/enhanced neural voice
+  const preferred = matching.find(v => {
+    const name = v.name.toLowerCase();
+    return name.includes('natural') || 
+           name.includes('premium') || 
+           name.includes('enhanced') || 
+           name.includes('google deutsch') || 
+           name.includes('google us english') ||
+           name.includes('google') || 
+           name.includes('siri') ||
+           name.includes('anna') ||
+           name.includes('petra') ||
+           name.includes('yannick') ||
+           name.includes('markus') ||
+           name.includes('martin') ||
+           name.includes('katja') ||
+           name.includes('conrad') ||
+           name.includes('samantha') ||
+           name.includes('ava') ||
+           name.includes('oliver');
+  });
+  return preferred || matching[0];
+}
+
+function populateVoiceSelectors() {
+  const selectDe = document.getElementById('voice-select-de');
+  const selectEn = document.getElementById('voice-select-en');
+  if (!selectDe || !selectEn || !cachedVoices.length) return;
+
+  const deVoices = cachedVoices.filter(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith('de'));
+  const enVoices = cachedVoices.filter(v => v.lang && v.lang.toLowerCase().replace('_', '-').startsWith('en'));
+
+  const currentDe = getBestVoice('de');
+  const currentEn = getBestVoice('en');
+
+  selectDe.innerHTML = deVoices.map(v => {
+    const isSelected = currentDe && (v.voiceURI === currentDe.voiceURI || v.name === currentDe.name);
+    const isNatural = v.name.toLowerCase().includes('enhanced') || 
+                      v.name.toLowerCase().includes('natural') || 
+                      v.name.toLowerCase().includes('google') || 
+                      v.name.toLowerCase().includes('siri') ||
+                      v.name.toLowerCase().includes('premium');
+    const tag = isNatural ? ' ⭐ Natural' : '';
+    return `<option value="${v.voiceURI || v.name}" ${isSelected ? 'selected' : ''}>${v.name} (${v.lang})${tag}</option>`;
+  }).join('') || '<option value="">Standard-Systemstimme</option>';
+
+  selectEn.innerHTML = enVoices.map(v => {
+    const isSelected = currentEn && (v.voiceURI === currentEn.voiceURI || v.name === currentEn.name);
+    const isNatural = v.name.toLowerCase().includes('enhanced') || 
+                      v.name.toLowerCase().includes('natural') || 
+                      v.name.toLowerCase().includes('google') || 
+                      v.name.toLowerCase().includes('siri') ||
+                      v.name.toLowerCase().includes('premium');
+    const tag = isNatural ? ' ⭐ Natural' : '';
+    return `<option value="${v.voiceURI || v.name}" ${isSelected ? 'selected' : ''}>${v.name} (${v.lang})${tag}</option>`;
+  }).join('') || '<option value="">Standard System Voice</option>';
+}
+
+function openVoiceSettings() {
+  sound.select();
+  populateVoiceSelectors();
+  const speedSlider = document.getElementById('voice-speed');
+  const pitchSlider = document.getElementById('voice-pitch');
+  const speedVal = document.getElementById('speed-val');
+  const pitchVal = document.getElementById('pitch-val');
+  if (speedSlider) speedSlider.value = customVoiceSettings.speed;
+  if (pitchSlider) pitchSlider.value = customVoiceSettings.pitch;
+  if (speedVal) speedVal.textContent = customVoiceSettings.speed.toFixed(2) + 'x';
+  if (pitchVal) pitchVal.textContent = customVoiceSettings.pitch.toFixed(2) + 'x';
+  document.getElementById('voice-modal').classList.add('open');
+}
+
+function closeVoiceSettings() {
+  sound.close();
+  document.getElementById('voice-modal').classList.remove('open');
+}
+
+function onVoiceChange(lang, val) {
+  customVoiceSettings[lang] = val;
+  localStorage.setItem('caretalk_voice_' + lang, val);
+  testVoice(lang);
+}
+
+function onSpeedChange(val) {
+  const num = parseFloat(val);
+  customVoiceSettings.speed = num;
+  localStorage.setItem('caretalk_speed', num);
+  const el = document.getElementById('speed-val');
+  if (el) el.textContent = num.toFixed(2) + 'x';
+}
+
+function onPitchChange(val) {
+  const num = parseFloat(val);
+  customVoiceSettings.pitch = num;
+  localStorage.setItem('caretalk_pitch', num);
+  const el = document.getElementById('pitch-val');
+  if (el) el.textContent = num.toFixed(2) + 'x';
+}
+
+function testVoice(lang) {
+  const sample = lang === 'de'
+    ? 'Guten Tag! Ich bin Ihre natürliche deutsche Stimme für CareTalk.'
+    : 'Hello! I am your natural spoken voice for CareTalk.';
+  say(sample, lang);
+}
+
+function say(text, lang = state.lang) {
+  if (!soundOn || !('speechSynthesis' in window)) return;
+  try {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+    window.speechSynthesis.cancel();
+    
+    // Safety delay to allow cancel to flush cleanly across browsers
+    setTimeout(() => {
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = lang === 'de' ? 'de-DE' : 'en-US';
+        
+        const voice = getBestVoice(lang);
+        if (voice) {
+          u.voice = voice;
+        }
+
+        // Apply smooth rate & pitch (customized or defaults)
+        u.rate = customVoiceSettings.speed || (lang === 'de' ? 0.92 : 0.96);
+        u.pitch = customVoiceSettings.pitch || 1.0;
+
+        u.onstart = () => {
+          document.querySelectorAll('.msg-container, .screen').forEach(el => el.classList.add('speaking'));
+        };
+        u.onend = () => {
+          document.querySelectorAll('.msg-container, .screen').forEach(el => el.classList.remove('speaking'));
+        };
+        u.onerror = () => {
+          document.querySelectorAll('.msg-container, .screen').forEach(el => el.classList.remove('speaking'));
+        };
+
+        activeUtterance = u;
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }, 15);
+  } catch (e) {}
+}
+
+/* ==========================================================================
+     Icons
+     ========================================================================== */
+const ICONS = {
+  droplet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
+  food: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+  tv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>',
+  tvOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/><line x1="2" y1="2" x2="22" y2="22"/></svg>',
+  pill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>',
+  wc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><path d="M7 21v-7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v7"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  move: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>',
+  arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+  arrowDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+  rotateLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6"/><path d="M2.66 15.57a10 10 0 1 0 .57-8.38L2.5 8"/></svg>',
+  rotateRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38L21.5 8"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+  sunWake: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>',
+  snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  wave: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-8a2 2 0 0 1 4 0v8a2 2 0 0 0 4 0v-2a2 2 0 0 1 2-2h2"/></svg>',
+  lightOn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2v1"/><path d="M12 8a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.4V17h4v-1.6c1.2-.6 2-1.9 2-3.4a4 4 0 0 0-4-4z"/><path d="m4.93 4.93.7.7"/><path d="m18.36 4.93-.7.7"/></svg>',
+  lightOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 8a4 4 0 0 0-3.3 1.7"/><path d="M15.3 12c0 1.5-.8 2.8-2 3.4V17h-2.6"/><line x1="2" y1="2" x2="22" y2="22"/></svg>',
+  doorOut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/><path d="m15 15 3-3-3-3"/><path d="M18 12h-7"/></svg>',
+  doorIn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/><path d="m9 9-3 3 3 3"/><path d="M6 12h7"/></svg>',
+  wheelchair: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M5 20a5 5 0 1 0 5-5H7.5"/><path d="M12 11h4l3 6"/><path d="m9 11 3-3 2 3"/></svg>',
+  bed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>',
+  
+  /* Body Parts for Visual Pain Assessment */
+  partHead: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11" r="7"/><path d="M12 18v4"/><path d="M9 22h6"/><path d="M9 11a3 3 0 0 1 6 0"/></svg>',
+  partEyes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
+  partEars: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a2 2 0 1 1-4 0c0-2.5 3-4.5 3-7.5a2.5 2.5 0 0 0-5 0"/></svg>',
+  partTeeth: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10c2 0 3 2 3 5 0 6-3 11-4.5 11-1 0-1.5-2-3.5-2s-2.5 2-3.5 2C7 20 4 15 4 9c0-3 1-5 3-5Z"/></svg>',
+  partNeck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M6 19a6 6 0 0 0 12 0"/><line x1="12" y1="11" x2="12" y2="19"/></svg>',
+  partChest: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
+  partStomach: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4c0 4-3 7-3 11a7 7 0 0 0 14 0c0-4-3-7-3-11H7Z"/><circle cx="12" cy="14" r="1.5"/></svg>',
+  partBackUpper: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M12 3v18"/><path d="m8 6 4 6 4-6"/></svg>',
+  partBackLower: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><circle cx="12" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 16h10"/></svg>',
+  partShoulder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18v-6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v6"/><circle cx="6" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>',
+  partArms: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l4-4 3 3 7-7"/><path d="M19 5h-5v5"/></svg>',
+  partHands: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v4"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M6 14v1a6 6 0 0 0 12 0v-4a2 2 0 0 0-4 0"/></svg>',
+  partHips: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8c4 2 12 2 16 0v6c-4 3-12 3-16 0V8Z"/><line x1="12" y1="8" x2="12" y2="16"/></svg>',
+  partLegs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v9l-2 9M16 3v9l2 9"/><circle cx="7" cy="12" r="1.5"/><circle cx="17" cy="12" r="1.5"/></svg>',
+  partFeet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h11a4 4 0 0 0 4-4V6h-4v6H4v6Z"/></svg>',
+  partEverywhere: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v7M8 9l4 2 4-2M9 21l3-8 3 8"/></svg>'
+};
+
+/* ==========================================================================
+     Content & Localization Data
+     ========================================================================== */
+const STRINGS = {
+  en: {
+    tagline: 'Bedside AAC',
+    pain: 'PAIN',
+    painAssessment: 'Emergency Pain Assessment',
+    undo: 'Undo',
+    clear: 'Clear',
+    speak: 'SPEAK',
+    placeholder: 'Tap any button to talk immediately…',
+    typeCta: 'Build a Sentence',
+    speaking: 'Speaking',
+    chooseCategory: 'Choose a category',
+    painTitle: 'Where does it hurt?',
+    painSeverity: 'How bad is it?',
+    painType: 'What kind of pain?',
+    painSkip: 'Skip',
+    painBack: 'Back',
+    painNext: 'Next',
+    painGenerate: 'Generate & Speak',
+    langLabel: 'Starters',
+    continueLabel: 'Continue with…',
+    talkingKeys: 'Talking Keyboard',
+    allParts: 'All Parts',
+    headFace: 'Head & Face',
+    torsoBack: 'Chest & Back',
+    armsLegs: 'Arms & Legs',
+    fastYes: 'YES',
+    fastNo: 'NO',
+    fastWait: 'WAIT',
+    fastThanks: 'THANKS',
+    callBell: 'NOTRUF / BELL',
+    callActiveTitle: 'EMERGENCY NURSE CALL ACTIVE',
+    callActiveSub: 'Caregiver notified • High-priority alert broadcast',
+    callDismiss: '✓ I AM HERE / DISMISS',
+    shiftLog: 'Log',
+    shiftLogTitle: 'Caregiver Shift Log',
+    shiftLogSub: 'Chronological communication & care requests',
+    clearLog: 'Clear Log',
+    exportLog: 'Copy Log',
+    emptyLog: 'No requests logged yet. Tap any button or soundboard item to start communicating.',
+    voiceBtn: 'Voice',
+    voiceStudioTitle: 'Voice & Speaker Settings',
+    voiceStudioSub: 'Select natural voices, pitch & speech rate (100% Free)',
+    voiceGerman: 'German Voice (Deutsch)',
+    voiceEnglish: 'English Voice',
+    testVoiceBtn: '▶ Test',
+    speechSpeed: 'Speech Speed (Rate)',
+    speechPitch: 'Voice Pitch (Warmth)'
+  },
+  de: {
+    tagline: 'Pflege-Sprachausgabe',
+    pain: 'SCHMERZ',
+    painAssessment: 'Schmerz-Meldung',
+    undo: 'Zurück',
+    clear: 'Löschen',
+    speak: 'SPRECHEN',
+    placeholder: 'Wort oder Taste antippen zum Sprechen…',
+    typeCta: 'Satz zusammenstellen',
+    speaking: 'Spricht',
+    chooseCategory: 'Kategorie wählen',
+    painTitle: 'Wo tut es weh?',
+    painSeverity: 'Wie stark sind die Schmerzen?',
+    painType: 'Welche Art von Schmerz?',
+    painSkip: 'Überspringen',
+    painBack: 'Zurück',
+    painNext: 'Weiter',
+    painGenerate: 'Erzeugen & Sprechen',
+    langLabel: 'Satzanfänge',
+    continueLabel: 'Fortsetzen mit…',
+    talkingKeys: 'Sprechende Tastatur',
+    allParts: 'Alle Körperteile',
+    headFace: 'Kopf & Gesicht',
+    torsoBack: 'Brust & Rücken',
+    armsLegs: 'Arme & Beine',
+    fastYes: 'JA',
+    fastNo: 'NEIN',
+    fastWait: 'WARTEN',
+    fastThanks: 'DANKE',
+    callBell: 'NOTRUF',
+    callActiveTitle: 'NOTRUF AKTIV / PFLEGEKRAFT GERUFEN',
+    callActiveSub: 'Pflegekraft verständigt • Dringender Ruf abgesetzt',
+    callDismiss: '✓ ANWESEND / QUITTIEREN',
+    shiftLog: 'Log',
+    shiftLogTitle: 'Pflegekraft-Schichtprotokoll',
+    shiftLogSub: 'Chronologische Übersicht aller Mitteilungen & Rufe',
+    clearLog: 'Protokoll leeren',
+    exportLog: 'Kopieren',
+    emptyLog: 'Noch keine Einträge. Jede Eingabe wird hier minutengenau protokolliert.',
+    voiceBtn: 'Stimme',
+    voiceStudioTitle: 'Sprachausgabe & Stimmen',
+    voiceStudioSub: 'Natürliche Stimmen, Tonhöhe & Sprechtempo wählen (100% Kostenlos)',
+    voiceGerman: 'Deutsche Stimme (Deutsch)',
+    voiceEnglish: 'Englische Stimme',
+    testVoiceBtn: '▶ Probe hören',
+    speechSpeed: 'Sprechgeschwindigkeit',
+    speechPitch: 'Tonhöhe (Klangfarbe)'
+  }
+};
+
+const CAT_LABELS = {
+  thing:   { en: 'Things',          de: 'Dinge' },
+  action:  { en: 'Position & Rest', de: 'Position & Ruhe' },
+  comfort: { en: 'Comfort',         de: 'Komfort' },
+  social:  { en: 'Urgent',          de: 'Dringend' }
+};
+
+/* Fast Response Definitions */
+const FAST_RESPONSES = {
+  yes: {
+    en: 'Yes.',
+    de: 'Ja.',
+    sound: () => sound.fastYes(),
+    icon: '✓'
+  },
+  no: {
+    en: 'No.',
+    de: 'Nein.',
+    sound: () => sound.fastNo(),
+    icon: '✕'
+  },
+  wait: {
+    en: 'Please wait a moment.',
+    de: 'Bitte einen Moment warten.',
+    sound: () => sound.fastWait(),
+    icon: '⏳'
+  },
+  thanks: {
+    en: 'Thank you!',
+    de: 'Vielen Dank!',
+    sound: () => sound.fastThanks(),
+    icon: '💙'
+  }
+};
+
+/* Smart Toggle Buttons with Pairs & Opposites */
+const QUICK_ACTIONS = [
+  { id:'water', cat:'thing', icon:'droplet', en:'Water', de:'Wasser', phrase:{ en:'I need water.', de:'Ich brauche bitte etwas Wasser.' } },
+  { id:'food', cat:'thing', icon:'food', en:'Food', de:'Essen', phrase:{ en:'I need food.', de:'Ich möchte bitte etwas essen.' } },
+  { 
+    id:'tv', cat:'thing', isToggle: true,
+    states: [
+      { icon:'tv', en:'Watch TV', de:'Fernsehen', phrase:{ en:'I want to watch TV.', de:'Ich möchte bitte fernsehen.' }, badge:{ en:'OFF', de:'AUS' } },
+      { icon:'tvOff', en:'Turn TV Off', de:'TV aus', phrase:{ en:'Please turn the TV off.', de:'Bitte schalten Sie den Fernseher aus.' }, badge:{ en:'ON', de:'AN' } }
+    ]
+  },
+  { id:'medication', cat:'thing', icon:'pill', en:'Medication', de:'Medikamente', phrase:{ en:'I need my medication.', de:'Ich brauche bitte meine Medikamente.' } },
+  { id:'toilet', cat:'social', icon:'wc', en:'Toilet', de:'Toilette', phrase:{ en:'I need the toilet.', de:'Ich muss bitte dringend zur Toilette.' } },
+  { id:'help', cat:'social', icon:'bell', en:'Help', de:'Hilfe', phrase:{ en:'I need help!', de:'Bitte helfen Sie mir!' } },
+  { 
+    id:'wheelchair', cat:'action', isToggle: true,
+    states: [
+      { icon:'wheelchair', en:'To Wheelchair', de:'In Rollstuhl', phrase:{ en:'Please help me into the wheelchair.', de:'Bitte helfen Sie mir in den Rollstuhl.' }, badge:{ en:'BED', de:'BETT' } },
+      { icon:'bed', en:'Back to Bed', de:'Ins Bett', phrase:{ en:'Please help me back into bed.', de:'Bitte helfen Sie mir zurück ins Bett.' }, badge:{ en:'CHAIR', de:'STUHL' } }
+    ]
+  },
+  { 
+    id:'outside', cat:'action', isToggle: true,
+    states: [
+      { icon:'doorOut', en:'Go outside', de:'Rausgehen', phrase:{ en:'I want to go outside.', de:'Ich möchte bitte nach draußen an die frische Luft.' }, badge:{ en:'IN', de:'DRINNEN' } },
+      { icon:'doorIn', en:'Go inside', de:'Reingehen', phrase:{ en:'I want to go back inside.', de:'Ich möchte bitte wieder nach drinnen.' }, badge:{ en:'OUT', de:'DRAUSSEN' } }
+    ]
+  },
+  { id:'position', cat:'action', icon:'move', en:'Change position', de:'Position ändern', phrase:{ en:'Please change my position.', de:'Bitte lagern Sie mich um.' } },
+  { id:'raise', cat:'action', icon:'arrowUp', en:'Raise head', de:'Oberkörper hoch', phrase:{ en:'Please raise my upper body.', de:'Bitte stellen Sie mein Kopfteil höher.' } },
+  { id:'lower', cat:'action', icon:'arrowDown', en:'Lower head', de:'Oberkörper runter', phrase:{ en:'Please lower my upper body.', de:'Bitte stellen Sie mein Kopfteil flacher.' } },
+  { id:'turnleft', cat:'action', icon:'rotateLeft', en:'Turn left', de:'Nach links drehen', phrase:{ en:'Please turn me to the left.', de:'Bitte drehen Sie mich nach links.' } },
+  { id:'turnright', cat:'action', icon:'rotateRight', en:'Turn right', de:'Nach rechts drehen', phrase:{ en:'Bitte drehen Sie mich nach rechts.' } },
+  { 
+    id:'sleep', cat:'action', isToggle: true,
+    states: [
+      { icon:'moon', en:'Sleep', de:'Schlafen', phrase:{ en:'I want to sleep now.', de:'Ich möchte mich jetzt ausruhen und schlafen.' }, badge:{ en:'AWAKE', de:'WACH' } },
+      { icon:'sunWake', en:'Awake', de:'Wach', phrase:{ en:'I am awake now.', de:'Ich bin jetzt wieder wach.' }, badge:{ en:'ASLEEP', de:'SCHLÄFT' } }
+    ]
+  },
+  { 
+    id:'light', cat:'comfort', isToggle: true,
+    states: [
+      { icon:'lightOn', en:'Light ON', de:'Licht AN', phrase:{ en:'Please turn the light on.', de:'Bitte schalten Sie das Licht an.' }, badge:{ en:'OFF', de:'AUS' } },
+      { icon:'lightOff', en:'Light OFF', de:'Licht AUS', phrase:{ en:'Please turn the light off.', de:'Bitte schalten Sie das Licht aus.' }, badge:{ en:'ON', de:'AN' } }
+    ]
+  },
+  { id:'cold', cat:'comfort', icon:'snow', en:'Too Cold', de:'Zu kalt', phrase:{ en:"I am cold.", de:'Mir ist kalt, bitte decken Sie mich zu.' } },
+  { id:'hot', cat:'comfort', icon:'sun', en:'Too Hot', de:'Zu heiß', phrase:{ en:"I am too hot.", de:'Mir ist zu warm, bitte nehmen Sie die Decke weg.' } },
+  { id:'uncomfortable', cat:'comfort', icon:'wave', en:'Uncomfortable', de:'Unbequem', phrase:{ en:"I am uncomfortable.", de:'Ich liege unbequem, bitte helfen Sie mir.' } }
+];
+
+const STARTERS = [
+  { en:'I want', de:'Ich möchte' },
+  { en:'I need', de:'Ich brauche' },
+  { en:'I have', de:'Ich habe' },
+  { en:"I am", de:'Ich bin' },
+  { en:'Please', de:'Bitte' },
+  { en:'Thank you', de:'Danke' }
+];
+
+const CONTINUATIONS = [
+  { en:'into the wheelchair', de:'in den Rollstuhl' },
+  { en:'back into bed', de:'zurück ins Bett' },
+  { en:'to go outside', de:'nach draußen gehen' },
+  { en:'to go back inside', de:'wieder reingehen' },
+  { en:'the light turned on', de:'das Licht an' },
+  { en:'the light turned off', de:'das Licht aus' },
+  { en:'the TV turned on', de:'den Fernseher an' },
+  { en:'the TV turned off', de:'den Fernseher aus' },
+  { en:'water', de:'Wasser' },
+  { en:'help', de:'Hilfe' },
+  { en:'the toilet', de:'die Toilette' },
+  { en:'medication', de:'Medikamente' },
+  { en:'to change position', de:'eine neue Position' },
+  { en:'pain', de:'Schmerzen' },
+  { en:'to sleep', de:'schlafen' },
+  { en:'blanket', de:'die Decke' },
+  { en:'glasses', de:'meine Brille' }
+];
+
+const MINI_KEYS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','␣','⌫'];
+
+const PAIN_LOCATIONS = [
+  { id: 'head', cat: 'head', icon: 'partHead', en: 'Head', de: 'Kopf', sub: { en: 'Forehead & Scalp', de: 'Stirn & Kopf' } },
+  { id: 'eyes', cat: 'head', icon: 'partEyes', en: 'Eyes', de: 'Augen', sub: { en: 'Vision & Eyes', de: 'Augen' } },
+  { id: 'ears', cat: 'head', icon: 'partEars', en: 'Ears', de: 'Ohren', sub: { en: 'Hearing & Ears', de: 'Ohren' } },
+  { id: 'mouth', cat: 'head', icon: 'partTeeth', en: 'Teeth / Mouth', de: 'Zähne / Mund', sub: { en: 'Jaw & Teeth', de: 'Kiefer & Zähne' } },
+  { id: 'neck', cat: 'head', icon: 'partNeck', en: 'Neck / Throat', de: 'Hals / Nacken', sub: { en: 'Throat & Nape', de: 'Hals & Kehle' } },
+  
+  { id: 'chest', cat: 'torso', icon: 'partChest', en: 'Chest', de: 'Brust', sub: { en: 'Ribs & Heart', de: 'Brustkorb' } },
+  { id: 'stomach', cat: 'torso', icon: 'partStomach', en: 'Stomach', de: 'Bauch', sub: { en: 'Abdomen & Belly', de: 'Magen & Darm' } },
+  { id: 'back_up', cat: 'torso', icon: 'partBackUpper', en: 'Upper Back', de: 'Oberer Rücken', sub: { en: 'Shoulder Blades', de: 'Schulterblätter' } },
+  { id: 'back_low', cat: 'torso', icon: 'partBackLower', en: 'Lower Back', de: 'Unterer Rücken', sub: { en: 'Lumbar & Spine', de: 'Lendenwirbel' } },
+  
+  { id: 'shoulders', cat: 'limbs', icon: 'partShoulder', en: 'Shoulders', de: 'Schultern', sub: { en: 'Left & Right', de: 'Links & Rechts' } },
+  { id: 'arms', cat: 'limbs', icon: 'partArms', en: 'Arms', de: 'Arme', sub: { en: 'Upper & Forearms', de: 'Ober- & Unterarme' } },
+  { id: 'hands', cat: 'limbs', icon: 'partHands', en: 'Hands / Fingers', de: 'Hände / Finger', sub: { en: 'Wrists & Palms', de: 'Handgelenke' } },
+  { id: 'hips', cat: 'limbs', icon: 'partHips', en: 'Hips / Pelvis', de: 'Hüfte / Becken', sub: { en: 'Pelvic region', de: 'Beckenbereich' } },
+  { id: 'legs', cat: 'limbs', icon: 'partLegs', en: 'Legs / Knees', de: 'Beine / Knie', sub: { en: 'Thighs & Calves', de: 'Oberschenkel & Knie' } },
+  { id: 'feet', cat: 'limbs', icon: 'partFeet', en: 'Feet / Toes', de: 'Füße / Zehen', sub: { en: 'Ankles & Soles', de: 'Knöchel & Sohlen' } },
+  
+  { id: 'everywhere', cat: 'general', icon: 'partEverywhere', en: 'Whole Body', de: 'Ganzkörper / Überall', sub: { en: 'Everywhere', de: 'Überall Schmerzen' } }
+];
+
+const PAIN_TYPES = [
+  { en:'Sharp', de:'Stechend' }, { en:'Burning', de:'Brennend' }, { en:'Pressure', de:'Drückend' },
+  { en:'Throbbing', de:'Pochend' }, { en:'Aching', de:'Dumpf' }, { en:'Cramping', de:'Krampfartig' }
+];
+
+/* ==========================================================================
+     State Management
+     ========================================================================== */
+let state = { 
+  lang: 'en', 
+  composing: [], 
+  quickPhrase: null,
+  activeCat: 'thing',
+  toggleStates: { tv: 0, wheelchair: 0, outside: 0, sleep: 0, light: 0 }
+};
+let pain = { step: 0, loc: null, sev: null, type: null };
+let shiftLogs = [];
+
+function getEffectiveAction(raw) {
+  if (!raw.isToggle) return raw;
+  const idx = state.toggleStates[raw.id] || 0;
+  const s = raw.states[idx];
+  return {
+    ...raw,
+    icon: s.icon,
+    en: s.en,
+    de: s.de,
+    phrase: s.phrase,
+    badge: s.badge,
+    toggleState: idx
+  };
+}
+
+function currentMessage() {
+  if (state.quickPhrase) return state.quickPhrase[state.lang];
+  if (state.composing.length) {
+    const words = state.composing.map(t => t[state.lang] || t).join(' ');
+    return words + (state.composing.length >= 2 ? '.' : '');
+  }
+  return '';
+}
+
+function renderAll() {
+  const msg = currentMessage();
+  document.querySelectorAll('.msg-display, .msg-display-c').forEach(el => {
+    el.textContent = msg || STRINGS[state.lang].placeholder;
+    el.classList.toggle('placeholder', !msg);
+  });
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = STRINGS[state.lang][el.dataset.i18n] || el.textContent;
+  });
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === state.lang);
+  });
+  updateAllQuickButtons();
+  updateAllChips();
+  renderPainLocations();
+  updateShiftLogUI();
+}
+
+function updateAllChips() {
+  renderChips(document.getElementById('starters-a'), STARTERS);
+  renderChips(document.getElementById('continuations-a'), CONTINUATIONS);
+  renderChips(document.getElementById('starters-b'), STARTERS);
+  renderChips(document.getElementById('continuations-b'), CONTINUATIONS);
+  renderChips(document.getElementById('starters-c'), STARTERS);
+  renderChips(document.getElementById('continuations-c'), CONTINUATIONS);
+}
+
+function updateAllQuickButtons() {
+  renderQuickButtons(document.getElementById('grid-a'), QUICK_ACTIONS);
+  renderQuickButtons(document.getElementById('grid-b'), QUICK_ACTIONS);
+  const catPanel = document.getElementById('cat-panel-c');
+  if (catPanel && state.activeCat) {
+    renderQuickButtons(catPanel, QUICK_ACTIONS.filter(a => a.cat === state.activeCat));
+  }
+}
+
+function setLang(l) {
+  if (!canTap()) return;
+  sound.lang();
+  state.lang = l;
+  renderAll();
+  showToast(l === 'en' ? 'Language: English' : 'Sprache: Deutsch');
+  if (instantTalk) say(l === 'en' ? 'English' : 'Deutsch', l);
+}
+
+function showToast(text) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.innerHTML = `🔊 <span>${text}</span>`;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function triggerButtonTalkAnimation(btn) {
+  if (!btn) return;
+  btn.classList.add('talking-now');
+  setTimeout(() => btn.classList.remove('talking-now'), 450);
+}
+
+/* ==========================================================================
+     Caregiver Shift Log
+     ========================================================================== */
+function logShiftEvent(type, textEn, textDe, meta = '') {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const entry = {
+    id: Date.now() + Math.random(),
+    time: timeStr,
+    type,
+    en: textEn,
+    de: textDe,
+    meta
+  };
+  shiftLogs.unshift(entry);
+  updateShiftLogUI();
+}
+
+function updateShiftLogUI() {
+  const badges = document.querySelectorAll('.log-badge, #shift-log-badge');
+  badges.forEach(b => b.textContent = shiftLogs.length);
+  
+  const countEl = document.getElementById('log-count-text');
+  if (countEl) {
+    countEl.textContent = `${shiftLogs.length} ${state.lang === 'de' ? 'Einträge' : 'entries'}`;
+  }
+  
+  const listEl = document.getElementById('shift-log-list');
+  if (!listEl) return;
+  if (!shiftLogs.length) {
+    listEl.innerHTML = `<div class="shift-log-empty">${STRINGS[state.lang].emptyLog}</div>`;
+    return;
+  }
+
+  listEl.innerHTML = shiftLogs.map(item => {
+    const isCall = item.type === 'call';
+    const isPain = item.type === 'pain';
+    const text = state.lang === 'de' ? item.de : item.en;
+    return `
+      <div class="shift-item ${isCall ? 'is-call' : ''} ${isPain ? 'is-pain' : ''}">
+        <div class="shift-item-icon">${item.meta || '💬'}</div>
+        <div class="shift-item-body">
+          <div class="shift-item-top">
+            <span class="shift-item-title">${item.type.toUpperCase()}</span>
+            <span class="shift-item-time">${item.time}</span>
+          </div>
+          <div class="shift-item-spoken">"${text}"</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleShiftLog() {
+  sound.select();
+  const drawer = document.getElementById('shift-log-drawer');
+  drawer.classList.toggle('open');
+}
+
+function clearShiftLog() {
+  sound.clear();
+  shiftLogs = [];
+  updateShiftLogUI();
+  showToast(state.lang === 'de' ? 'Protokoll geleert' : 'Log cleared');
+}
+
+function exportShiftLog() {
+  sound.select();
+  if (!shiftLogs.length) return;
+  const lines = shiftLogs.map(l => `[${l.time}] ${l.type.toUpperCase()}: ${state.lang === 'de' ? l.de : l.en}`).join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(lines).then(() => {
+      showToast(state.lang === 'de' ? 'In Zwischenablage kopiert!' : 'Copied to clipboard!');
+    });
+  }
+}
+
+/* ==========================================================================
+     Fast Response Bar Handlers (YES / NO / WAIT / THANKS)
+     ========================================================================== */
+function handleFast(type, btnElement) {
+  if (!canTap()) return;
+  const item = FAST_RESPONSES[type];
+  if (!item) return;
+  
+  item.sound();
+  triggerButtonTalkAnimation(btnElement);
+
+  state.composing = [];
+  state.quickPhrase = { en: item.en, de: item.de };
+  const phrase = item[state.lang];
+  showToast(`${phrase}`);
+  renderAll();
+
+  if (instantTalk) say(phrase, state.lang);
+  logShiftEvent('fast', item.en, item.de, item.icon);
+}
+
+/* ==========================================================================
+     Emergency Nurse Call / Loud Bell
+     ========================================================================== */
+function triggerCallBell() {
+  if (!canTap()) return;
+  sound.nurseBell();
+  const overlay = document.getElementById('call-bell-overlay');
+  if (overlay) overlay.classList.add('active');
+
+  const msgEn = 'Emergency! Caregiver needed immediately!';
+  const msgDe = 'Notruf! Pflegekraft wird dringend benötigt!';
+  const spoken = state.lang === 'de' ? msgDe : msgEn;
+
+  showToast(`🚨 ${spoken}`);
+  say(spoken, state.lang);
+  logShiftEvent('call', msgEn, msgDe, '🚨');
+}
+
+function dismissCallBell() {
+  sound.select();
+  const overlay = document.getElementById('call-bell-overlay');
+  if (overlay) overlay.classList.remove('active');
+  const dismissText = state.lang === 'de' ? 'Pflegekraft anwesend' : 'Caregiver is here';
+  showToast(`✓ ${dismissText}`);
+  if (instantTalk) say(dismissText, state.lang);
+  logShiftEvent('ack', 'Call acknowledged by caregiver', 'Notruf durch Pflegekraft quittiert', '✓');
+}
+
+/* ==========================================================================
+     Bedside Live Clock & Night Mode
+     ========================================================================== */
+function updateBedsideClock() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.querySelectorAll('.bedside-clock').forEach(el => el.textContent = timeStr);
+}
+setInterval(updateBedsideClock, 1000);
+updateBedsideClock();
+
+function toggleNightMode() {
+  sound.select();
+  const isNight = document.documentElement.getAttribute('data-theme') === 'night';
+  if (isNight) {
+    document.documentElement.removeAttribute('data-theme');
+    showToast(state.lang === 'de' ? 'Nachtmodus AUS' : 'Night Mode OFF');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'night');
+    showToast(state.lang === 'de' ? '🌙 Nachtmodus AN (Gedimmt)' : '🌙 Night Mode ON (Dimmed)');
+  }
+}
+
+/* ==========================================================================
+     Instant Talk Button Handlers ("Talk Right Away Like a Toy!")
+     ========================================================================== */
+function handleQuick(id, btnElement) {
+  if (!canTap()) return;
+  const rawAction = QUICK_ACTIONS.find(a => a.id === id);
+  if (!rawAction) return;
+
+  const effective = getEffectiveAction(rawAction);
+  sound.toyPop(rawAction.cat);
+  triggerButtonTalkAnimation(btnElement);
+
+  state.composing = [];
+  state.quickPhrase = effective.phrase;
+
+  const phraseToSpeak = effective.phrase[state.lang];
+  showToast(`${STRINGS[state.lang].speaking}: "${phraseToSpeak}"`);
+
+  // If toggle, flip state for next tap
+  if (rawAction.isToggle) {
+    const curIdx = state.toggleStates[id] || 0;
+    state.toggleStates[id] = 1 - curIdx;
+    setTimeout(() => {
+      updateAllQuickButtons();
+    }, 280);
+  }
+
+  renderAll();
+
+  // Instant Talk Web Speech Playback
+  if (instantTalk) {
+    say(phraseToSpeak, state.lang);
+  }
+
+  logShiftEvent('quick', effective.phrase.en, effective.phrase.de, '💬');
+}
+
+function handleChipPress(chipObj, btnElement) {
+  if (!canTap()) return;
+  sound.chip();
+  triggerButtonTalkAnimation(btnElement);
+
+  state.quickPhrase = null;
+  state.composing.push(chipObj);
+  renderAll();
+
+  const wordToSpeak = chipObj[state.lang];
+  showToast(`${wordToSpeak}`);
+
+  // Immediate voice synthesis of the word / starter
+  if (instantTalk) {
+    say(wordToSpeak, state.lang);
+  }
+
+  logShiftEvent('chip', chipObj.en, chipObj.de, '✨');
+}
+
+function handleKeypress(k, btnElement) {
+  if (!canTap()) return;
+  sound.key();
+  triggerButtonTalkAnimation(btnElement);
+
+  if (k === '⌫') {
+    undo();
+    return;
+  }
+  
+  const char = k === '␣' ? ' ' : k;
+  state.quickPhrase = null;
+  
+  if (state.composing.length > 0 && typeof state.composing[state.composing.length - 1] === 'string') {
+    state.composing[state.composing.length - 1] += char;
+  } else {
+    state.composing.push(char);
+  }
+  renderAll();
+
+  // Speak letter name instantly
+  if (instantTalk) {
+    say(k === '␣' ? (state.lang === 'en' ? 'Space' : 'Leertaste') : k, state.lang);
+  }
+}
+
+function undo() {
+  if (!canTap()) return;
+  sound.undo();
+  if (state.quickPhrase) {
+    state.quickPhrase = null;
+  } else {
+    state.composing.pop();
+  }
+  renderAll();
+}
+
+function clearMsg() {
+  if (!canTap()) return;
+  sound.clear();
+  state.quickPhrase = null;
+  state.composing = [];
+  renderAll();
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function speak() {
+  if (!canTap()) return;
+  const msg = currentMessage();
+  if (!msg) {
+    sound.select();
+    showToast(state.lang === 'en' ? 'Tap a button to talk!' : 'Taste antippen zum Sprechen!');
+    return;
+  }
+  sound.confirm();
+  document.querySelectorAll('.speak-btn').forEach(b => {
+    b.classList.add('speaking');
+    setTimeout(() => b.classList.remove('speaking'), 1200);
+  });
+  showToast(`${STRINGS[state.lang].speaking}: "${msg}"`);
+  say(msg, state.lang);
+  logShiftEvent('speak', msg, msg, '🔊');
+}
+
+function toggleInstantTalk() {
+  instantTalk = !instantTalk;
+  const statusEl = document.getElementById('instant-talk-status');
+  statusEl.textContent = instantTalk ? 'ON (Toy Mode)' : 'OFF (Manual)';
+  statusEl.parentElement.style.background = instantTalk ? '' : 'var(--surface-subtle)';
+  showToast(instantTalk ? '🧸 Instant Talk Activated!' : 'Manual Speak Mode Activated');
+  sound.select();
+}
+
+function toggleSound(btn) {
+  soundOn = !soundOn;
+  btn.textContent = soundOn ? '🔊 Sound' : '🔇 Muted';
+  btn.classList.toggle('active', soundOn);
+  if (soundOn) {
+    tone(660, { duration: 0.08, gain: 0.15 });
+  } else {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  }
+}
+
+/* ==========================================================================
+     DOM Renderers
+     ========================================================================== */
+function renderQuickButtons(container, actions) {
+  if (!container) return;
+  container.innerHTML = actions.map(raw => {
+    const a = getEffectiveAction(raw);
+    const badgeHtml = raw.isToggle && a.badge ? `
+      <span class="qb-toggle-badge state-${a.toggleState}"><span>${a.toggleState === 1 ? '●' : '○'}</span> ${a.badge[state.lang]}</span>
+    ` : '';
+    return `
+      <button class="quick-btn cat-${a.cat} ${raw.isToggle ? 'is-toggle-btn state-' + a.toggleState : ''}" onclick="handleQuick('${raw.id}', this)" aria-label="${a.en}">
+        ${badgeHtml}
+        <div class="qb-icon-wrap">${ICONS[a.icon] || ''}</div>
+        <span class="qb-label">${a[state.lang] || a.en}</span>
+        <span class="qb-speech-bubble">🔊</span>
+      </button>`;
+  }).join('');
+}
+
+function renderChips(container, list) {
+  if (!container) return;
+  container.innerHTML = list.map(c => `
+    <button class="chip" data-en="${c.en}" data-de="${c.de}" onclick='handleChipPress(${JSON.stringify(c)}, this)'>
+      <span>🔊</span>
+      <span>${c[state.lang]}</span>
+    </button>`).join('');
+}
+
+renderChips(document.getElementById('starters-a'), STARTERS);
+renderChips(document.getElementById('continuations-a'), CONTINUATIONS);
+renderChips(document.getElementById('starters-b'), STARTERS);
+renderChips(document.getElementById('continuations-b'), CONTINUATIONS);
+renderChips(document.getElementById('starters-c'), STARTERS);
+renderChips(document.getElementById('continuations-c'), CONTINUATIONS);
+
+document.getElementById('mini-keys-b').innerHTML = MINI_KEYS.map(k =>
+  `<button class="mini-key" onclick="handleKeypress('${k}', this)">${k}</button>`
+).join('');
+
+/* Category rail for Variant C */
+const catRail = document.getElementById('cat-rail-c');
+catRail.innerHTML = Object.keys(CAT_LABELS).map(key => `
+  <button class="cat-tab" data-catkey="${key}" onclick="openCategory('${key}', this)">
+    <span data-en="${CAT_LABELS[key].en}" data-de="${CAT_LABELS[key].de}">${CAT_LABELS[key].en}</span>
+  </button>`).join('');
+
+function openCategory(key, btn) {
+  sound.toyPop(key);
+  state.activeCat = key;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b === btn));
+  const panel = document.getElementById('cat-panel-c');
+  renderQuickButtons(panel, QUICK_ACTIONS.filter(a => a.cat === key));
+  renderAll();
+}
+
+function showVariant(id, evt) {
+  document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+  document.getElementById('variant-' + id).classList.add('active');
+  document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+  if (evt && evt.target) evt.target.classList.add('active');
+  renderAll();
+}
+
+function toggleSheet(open) {
+  open ? sound.open() : sound.close();
+  document.getElementById('sheet-a').classList.toggle('open', open);
+}
+
+/* ==========================================================================
+     PAIN Assessment Workflow (Instant Audio Feedback & Body Part Cards)
+     ========================================================================== */
+let currentPainLocFilter = 'all';
+
+function renderPainLocations(filter = currentPainLocFilter) {
+  currentPainLocFilter = filter;
+  const container = document.getElementById('pain-locations');
+  if (!container) return;
+  const filtered = filter === 'all' ? PAIN_LOCATIONS : PAIN_LOCATIONS.filter(l => l.cat === filter || l.cat === 'general');
+  container.innerHTML = filtered.map(l => {
+    const isSel = pain.loc && pain.loc.id === l.id;
+    return `
+      <button class="pain-loc-card ${isSel ? 'selected' : ''}" onclick="selectLoc('${l.id}', this)" aria-label="${l[state.lang]}">
+        <div class="plc-icon">${ICONS[l.icon] || ''}</div>
+        <div class="plc-title">${l[state.lang]}</div>
+        <div class="plc-sub">${l.sub ? l.sub[state.lang] : ''}</div>
+      </button>`;
+  }).join('');
+}
+
+function filterPainLocs(filter, btn) {
+  sound.select();
+  document.querySelectorAll('.pain-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+  renderPainLocations(filter);
+}
+
+const painTypeGrid = document.getElementById('pain-types');
+painTypeGrid.innerHTML = PAIN_TYPES.map((t, i) => `
+  <button class="pain-loc-btn" data-en="${t.en}" data-de="${t.de}" onclick="selectType(${i}, this)">${t.en}</button>`).join('');
+
+function sevColor(n) {
+  const hue = 135 - (n - 1) * 14;
+  return `hsl(${hue}, 75%, 42%)`;
+}
+const sevGrid1 = document.getElementById('sev-grid-1');
+const sevGrid2 = document.getElementById('sev-grid-2');
+for (let n = 1; n <= 10; n++) {
+  const btn = document.createElement('button');
+  btn.className = 'sev-btn';
+  btn.textContent = n;
+  btn.style.setProperty('--sc', sevColor(n));
+  btn.onclick = () => selectSev(n, btn);
+  (n <= 5 ? sevGrid1 : sevGrid2).appendChild(btn);
+}
+
+function selectLoc(id, btn) {
+  if (!canTap()) return;
+  sound.select();
+  triggerButtonTalkAnimation(btn);
+  const found = PAIN_LOCATIONS.find(l => l.id === id);
+  if (!found) return;
+  pain.loc = found;
+  document.querySelectorAll('.pain-loc-card').forEach(b => b.classList.remove('selected'));
+  if (btn) btn.classList.add('selected');
+  
+  // Instant speech of the body part
+  if (instantTalk) say(pain.loc[state.lang], state.lang);
+  setTimeout(() => painGoto(1), 260);
+}
+
+function selectSev(n, btn) {
+  if (!canTap()) return;
+  sound.severity(n);
+  triggerButtonTalkAnimation(btn);
+  pain.sev = n;
+  document.querySelectorAll('.sev-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.background = 'var(--surface-subtle)';
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--ink)';
+  });
+  btn.classList.add('selected');
+  btn.style.background = sevColor(n);
+  btn.style.borderColor = sevColor(n);
+  btn.style.color = '#fff';
+
+  // Instant speech of the severity score
+  if (instantTalk) {
+    const numWordsEn = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+    const numWordsDe = ['Eins', 'Zwei', 'Drei', 'Vier', 'Fünf', 'Sechs', 'Sieben', 'Acht', 'Neun', 'Zehn'];
+    say(state.lang === 'en' ? numWordsEn[n - 1] : numWordsDe[n - 1], state.lang);
+  }
+}
+
+function selectType(i, btn) {
+  if (!canTap()) return;
+  sound.select();
+  triggerButtonTalkAnimation(btn);
+  pain.type = PAIN_TYPES[i];
+  document.querySelectorAll('#pain-types .pain-loc-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  if (instantTalk) say(pain.type[state.lang], state.lang);
+  setTimeout(() => painGoto(3), 220);
+}
+
+function painSentence(lang) {
+  if (lang === 'de') {
+    const sevWord = pain.sev >= 8 ? 'sehr starke' : pain.sev >= 5 ? 'mittlere' : 'leichte';
+    let s = `Ich habe ${sevWord} Schmerzen im Bereich ${pain.loc.de}. Die Schmerzstärke liegt bei ${pain.sev} von 10.`;
+    if (pain.type) {
+      s += ` Der Schmerz fühlt sich ${pain.type.de.toLowerCase()} an.`;
+    }
+    return s;
+  }
+  const sevWord = pain.sev >= 8 ? 'severe' : pain.sev >= 5 ? 'moderate' : 'mild';
+  let s = `I have ${sevWord} pain in my ${pain.loc.en.toLowerCase()}. The pain is ${pain.sev} out of 10.`;
+  if (pain.type) {
+    s += ` It feels ${pain.type.en.toLowerCase()}.`;
+  }
+  return s;
+}
+
+function painGoto(step) {
+  pain.step = step;
+  document.querySelectorAll('.pain-step').forEach(s => s.classList.toggle('active', Number(s.dataset.step) === step));
+  document.getElementById('pain-back').style.visibility = step === 0 ? 'hidden' : 'visible';
+  document.getElementById('pain-skip').style.display = step === 2 ? 'inline-flex' : 'none';
+  document.getElementById('pain-next').style.display = step === 3 ? 'none' : 'inline-flex';
+  if (step === 3) {
+    document.getElementById('pain-review').textContent = painSentence(state.lang);
+  }
+}
+
+function painNext() {
+  if (!canTap()) return;
+  if (pain.step === 1 && pain.sev == null) {
+    sound.select();
+    showToast(state.lang === 'en' ? 'Select 1–10' : 'Zahl 1–10 wählen');
+    return;
+  }
+  if (pain.step === 3) { painFinish(); return; }
+  sound.select();
+  painGoto(pain.step + 1);
+}
+function painSkipType() { if (!canTap()) return; sound.select(); pain.type = null; painGoto(3); }
+function painBack() { if (!canTap()) return; sound.select(); painGoto(Math.max(0, pain.step - 1)); }
+
+function painFinish() {
+  const phraseEn = painSentence('en');
+  const phraseDe = painSentence('de');
+  state.composing = [];
+  state.quickPhrase = { en: phraseEn, de: phraseDe };
+  renderAll();
+  closePain();
+  setTimeout(speak, 150);
+  logShiftEvent('pain', phraseEn, phraseDe, '🩹');
+}
+
+function openPain() {
+  if (!canTap()) return;
+  sound.alert();
+  pain = { step: 0, loc: null, sev: null, type: null };
+  document.querySelectorAll('.pain-loc-card, .sev-btn, #pain-types .pain-loc-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.background = ''; b.style.borderColor = ''; b.style.color = '';
+  });
+  renderPainLocations('all');
+  document.querySelectorAll('.pain-filter-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+  painGoto(0);
+  document.getElementById('pain-modal').classList.add('open');
+  if (instantTalk) say(state.lang === 'en' ? 'Where is your pain?' : 'Wo tut es weh?', state.lang);
+}
+function closePain() { sound.close(); document.getElementById('pain-modal').classList.remove('open'); }
+
+/* Viewport and Theme */
+function setViewport(vp, btn) {
+  const wrap = document.getElementById('device-wrap');
+  wrap.classList.remove('vp-compact', 'vp-monitor17', 'vp-wide');
+  wrap.classList.add('vp-' + vp);
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleInfo() {
+  const panel = document.getElementById('info-panel');
+  const btn = document.getElementById('info-toggle');
+  const open = panel.classList.toggle('open');
+  btn.classList.toggle('active', open);
+  btn.setAttribute('aria-expanded', String(open));
+}
+function setTheme(mode, btn) {
+  if (mode === 'system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', mode);
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* Initialization */
+renderAll();
+openCategory('thing', catRail.querySelector('.cat-tab'));
+
+// Immediate Audio & Voice Unlock on First User Interaction (handles Chrome/Safari autoplay policies)
+['click', 'touchstart', 'keydown'].forEach(evtType => {
+  window.addEventListener(evtType, () => {
+    try {
+      ctx();
+      if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    } catch (e) {}
+  }, { once: true, passive: true });
+});
+</script>
+</body>
+</html>
