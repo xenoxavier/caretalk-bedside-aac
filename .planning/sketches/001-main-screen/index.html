@@ -1039,22 +1039,63 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ==========================================================================
-     Floating Sketch Toolbar
+     Floating Sketch Toolbar with Collapsible Right-Dock
      ========================================================================== */
   #sketch-tools {
     position: fixed; bottom: 14px; right: 14px; z-index: 10000;
     font-family: var(--font-heading); font-size: 12px; font-weight: 600;
-    background: rgba(15, 23, 42, 0.85); color: #fff; padding: 8px 12px; border-radius: var(--radius-md);
-    backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-modal); display: flex; gap: 12px; align-items: center;
+    background: rgba(15, 23, 42, 0.90); color: #fff; padding: 6px 10px 6px 8px; border-radius: var(--radius-full);
+    backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35); display: flex; gap: 8px; align-items: center;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  }
+  #sketch-tools.collapsed {
+    transform: translateX(calc(100% - 38px));
+  }
+  #sketch-tools.collapsed .tools-content {
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  #sketch-tools.collapsed .tools-toggle-icon {
+    transform: rotate(180deg);
+  }
+  .tools-toggle-tab {
+    background: rgba(255, 255, 255, 0.16);
+    border: none;
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .tools-toggle-tab:hover {
+    background: rgba(255, 255, 255, 0.32);
+    transform: scale(1.12);
+  }
+  .tools-toggle-icon {
+    display: inline-block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .tools-content {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: opacity 0.2s ease;
   }
   #sketch-tools .grp { display: flex; gap: 5px; }
-  #sketch-tools button {
+  #sketch-tools button:not(.tools-toggle-tab) {
     background: rgba(255,255,255,0.12); color: #fff; border: 1px solid transparent; border-radius: 6px;
     padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.15s ease;
   }
-  #sketch-tools button:hover { background: rgba(255,255,255,0.22); }
-  #sketch-tools button.active { background: #fff; color: #0F172A; }
+  #sketch-tools button:not(.tools-toggle-tab):hover { background: rgba(255,255,255,0.22); }
+  #sketch-tools button.active:not(.tools-toggle-tab) { background: #fff; color: #0F172A; }
 
   /* ==========================================================================
      Persistent Fast Response Bar (YES / NO / WAIT / THANKS)
@@ -2223,22 +2264,27 @@
 </div>
 
 <!-- ==========================================================================
-     Sketch Toolbar
+     Sketch Toolbar (Collapsible Right Dock)
      ========================================================================== -->
-<div id="sketch-tools">
-  <div class="grp">
-    <button onclick="setViewport('compact', this)">13″</button>
-    <button onclick="setViewport('monitor17', this)" class="active">17″</button>
-    <button onclick="setViewport('wide', this)">Wide</button>
-  </div>
-  <div class="grp">
-    <button onclick="setTheme('light', this)">Light</button>
-    <button onclick="setTheme('dark', this)">Dark</button>
-    <button onclick="setTheme('night', this)">🌙 Night</button>
-    <button onclick="setTheme('system', this)" class="active">Auto</button>
-  </div>
-  <div class="grp">
-    <button onclick="toggleSound(this)" id="sound-btn" class="active">🔊 Sound</button>
+<div id="sketch-tools" class="sketch-tools">
+  <button class="tools-toggle-tab" onclick="toggleSketchTools()" title="Toggle / Hide Toolbar (Right)">
+    <span class="tools-toggle-icon">▶</span>
+  </button>
+  <div class="tools-content">
+    <div class="grp">
+      <button onclick="setViewport('compact', this)">13″</button>
+      <button onclick="setViewport('monitor17', this)" class="active">17″</button>
+      <button onclick="setViewport('wide', this)">Wide</button>
+    </div>
+    <div class="grp">
+      <button onclick="setTheme('light', this)">Light</button>
+      <button onclick="setTheme('dark', this)">Dark</button>
+      <button onclick="setTheme('night', this)">🌙 Night</button>
+      <button onclick="setTheme('system', this)" class="active">Auto</button>
+    </div>
+    <div class="grp">
+      <button onclick="toggleSound(this)" id="sound-btn" class="active">🔊 Sound</button>
+    </div>
   </div>
 </div>
 
@@ -3788,6 +3834,20 @@ function setTheme(mode, btn) {
   else document.documentElement.setAttribute('data-theme', mode);
   btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+}
+
+function toggleSketchTools() {
+  const bar = document.getElementById('sketch-tools');
+  if (!bar) return;
+  const isCollapsed = bar.classList.toggle('collapsed');
+  localStorage.setItem('caretalk_tools_collapsed', isCollapsed ? 'true' : 'false');
+  if (typeof sound !== 'undefined' && sound.select) sound.select();
+}
+
+// Restore sketch tools collapsed preference on load
+if (localStorage.getItem('caretalk_tools_collapsed') === 'true') {
+  const bar = document.getElementById('sketch-tools');
+  if (bar) bar.classList.add('collapsed');
 }
 
 /* Initialization */
