@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F172A">
+<meta name="format-detection" content="telephone=no">
 <title>CareTalk — Clean AAC &amp; Instant-Talk Soundboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2071,12 +2075,207 @@
     transform: translateY(-1px);
   }
 
-  @media (max-width: 600px) {
-    body { padding-top: 156px; }
-    #variant-nav { flex-direction: column; align-items: stretch; gap: 8px; }
-    .talk-mode-badge { margin-left: 0; justify-content: center; }
-    #info-panel { top: 164px; right: 14px; left: 14px; width: auto; }
+  /* ==========================================================================
+     Mobile Viewport Enhancements (iPhone & Android & Compact Screens)
+     ========================================================================== */
+  .device-wrap.vp-phone {
+    max-width: 430px;
+    margin: 0 auto;
   }
+
+  @media (max-width: 680px), (max-height: 600px) and (orientation: landscape) {
+    body {
+      padding-top: 38px;
+    }
+    #variant-nav {
+      height: 38px;
+      padding: 2px 6px;
+      gap: 4px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #variant-nav .brand-badge {
+      font-size: 0.78rem;
+      margin-right: 2px;
+    }
+    .variant-tab, .kiosk-toggle-btn, .talk-mode-badge, #info-toggle {
+      padding: 3px 8px;
+      font-size: 0.70rem;
+    }
+    .stage {
+      height: calc(100vh - 38px);
+      height: calc(100dvh - 38px);
+      padding: 0;
+    }
+    body.is-kiosk .stage {
+      height: 100vh;
+      height: 100dvh;
+    }
+    .device {
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .screen {
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* App Bar */
+    .app-bar {
+      padding: 4px 8px;
+      gap: 4px;
+    }
+    .brand-group .wordmark { font-size: 0.88rem; }
+    .brand-group .sub-tag { display: none; }
+    .app-logo { width: 22px; height: 22px; border-radius: 6px; }
+    .app-logo svg { width: 13px; height: 13px; }
+    .lang-toggle button { padding: 3px 6px; font-size: 0.70rem; }
+    .bedside-clock { font-size: 0.74rem; padding: 3px 6px; }
+    .voice-btn, .log-btn { padding: 3px 6px; font-size: 0.72rem; gap: 3px; }
+    .voice-btn span:nth-child(2), .log-btn span:nth-child(2) { display: none; }
+    .call-bell-btn { padding: 4px 8px; font-size: 0.75rem; }
+    .pain-btn { padding: 4px 8px; font-size: 0.75rem; }
+
+    /* Fast Response Bar */
+    .fast-response-bar {
+      padding: 3px 6px;
+      gap: 4px;
+    }
+    .fast-btn {
+      padding: 5px 2px;
+      gap: 2px;
+    }
+    .fast-btn .fast-icon { font-size: 1.1rem; }
+    .fast-btn .fast-label { font-size: 0.68rem; font-weight: 800; }
+
+    /* Quick Grid on Mobile */
+    .grid-cat-bar { padding: 2px 6px; }
+    .grid-cat-btn { padding: 3px 6px; font-size: 0.72rem; }
+    .grid-page-btn { width: 26px; height: 26px; font-size: 0.70rem; }
+    .grid-page-indicator { font-size: 0.70rem; }
+    .quick-grid {
+      padding: 4px 6px;
+      gap: 4px;
+      grid-template-columns: repeat(2, 1fr) !important;
+      grid-template-rows: repeat(3, 1fr) !important;
+    }
+    .quick-btn {
+      min-height: 0 !important;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+    }
+    .qb-icon-wrap { width: 34px !important; height: 34px !important; }
+    .qb-icon-wrap svg { width: 20px !important; height: 20px !important; }
+    .qb-label { font-size: 0.82rem !important; }
+    .qb-badge { font-size: 0.58rem !important; padding: 1px 4px !important; }
+
+    /* Variant B Mobile Switcher & Stacking */
+    .mobile-b-tabs {
+      display: flex !important;
+      gap: 4px;
+      padding: 3px 6px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .m-tab {
+      flex: 1;
+      padding: 5px 8px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.78rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: var(--surface-subtle);
+      color: var(--ink-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .m-tab.active {
+      background: var(--primary);
+      color: var(--primary-ink);
+      border-color: var(--primary);
+      box-shadow: 0 1px 4px var(--primary-glow);
+    }
+    .v-b.show-board .grid-col { display: flex !important; flex: 1; width: 100%; border-right: none; }
+    .v-b.show-board .keyboard-col { display: none !important; }
+    .v-b.show-keys .grid-col { display: none !important; }
+    .v-b.show-keys .keyboard-col { display: flex !important; flex: 1; width: 100%; padding: 4px 6px; }
+
+    /* Keyboard on Mobile */
+    .kb-row {
+      gap: 2px;
+      min-height: 32px;
+      max-height: 44px;
+    }
+    .kb-key {
+      min-height: 30px;
+      font-size: clamp(0.92rem, 3.8vw, 1.15rem);
+      border-width: 1.5px;
+      border-bottom-width: 2.5px;
+    }
+    .kb-key-space { font-size: 0.78rem; }
+    .kb-key-clear { font-size: 0.70rem; }
+    .kb-key-speak { font-size: 0.74rem; }
+    .suggestion-chip { padding: 2px 7px; font-size: 0.74rem; }
+
+    /* Variant C on Mobile */
+    .v-c .hero-c { padding: 6px 8px; gap: 6px; }
+    .v-c .msg-display-c { font-size: 1rem; min-height: 48px; padding: 6px 10px; }
+    .v-c .speak-circle { width: 50px; height: 50px; font-size: 0.65rem; }
+    .v-c .cat-tab { padding: 4px 10px; font-size: 0.75rem; }
+    .v-c .category-panel {
+      grid-template-columns: repeat(2, 1fr) !important;
+      grid-template-rows: repeat(3, 1fr) !important;
+      gap: 4px;
+      padding: 4px 6px;
+    }
+
+    /* Message Zone on Mobile */
+    .message-zone { padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0)); }
+    .msg-container { padding: 4px 8px; gap: 4px; min-height: 40px; }
+    .msg-display { font-size: 0.94rem; }
+    .msg-controls { gap: 3px; }
+    .msg-controls .btn { padding: 4px 7px; font-size: 0.70rem; }
+    .speak-btn { padding: 5px 11px; font-size: 0.76rem; }
+
+    /* Mobile Modals */
+    #pain-modal.open {
+      padding: 0;
+    }
+    .pain-card {
+      width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      border-radius: 0;
+      padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0));
+    }
+    .voice-modal.open {
+      padding: 0;
+    }
+    .voice-card {
+      width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      border-radius: 0;
+      padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0));
+    }
+    .shift-log-drawer .shift-log-panel {
+      width: 100vw;
+      max-width: 100vw;
+    }
+  }
+
+  .mobile-b-tabs { display: none; }
 </style>
 </head>
 <body>
@@ -2260,7 +2459,7 @@
         </div>
 
         <!-- ============ VARIANT B: Split Rail ============ -->
-        <div class="variant v-b" id="variant-b">
+        <div class="variant v-b show-board" id="variant-b">
           <div class="app-bar">
             <div class="brand-group">
               <div class="app-logo">
@@ -2317,6 +2516,18 @@
             <button class="fast-btn fast-thanks" onclick="handleFast('thanks', this)">
               <span class="fast-icon">💙</span>
               <span class="fast-label" data-i18n="fastThanks">THANKS / DANKE</span>
+            </button>
+          </div>
+
+          <!-- Mobile Segmented View Switcher (Visible on Phones & Compact Screens) -->
+          <div class="mobile-b-tabs">
+            <button class="m-tab active" id="m-tab-board" onclick="setMobileBTab('board')">
+              <span>🔊</span>
+              <span>Soundboard</span>
+            </button>
+            <button class="m-tab" id="m-tab-keys" onclick="setMobileBTab('keys')">
+              <span>⌨️</span>
+              <span data-i18n="talkingKeys">Keyboard</span>
             </button>
           </div>
 
@@ -2639,7 +2850,8 @@
   </button>
   <div class="tools-content">
     <div class="grp">
-      <button onclick="setViewport('compact', this)">13″</button>
+      <button onclick="setViewport('phone', this)">📱 Phone</button>
+      <button onclick="setViewport('compact', this)">Tablet</button>
       <button onclick="setViewport('monitor17', this)" class="active">17″</button>
       <button onclick="setViewport('wide', this)">Wide</button>
     </div>
@@ -3409,10 +3621,28 @@ let state = {
   gridPageA: 0,
   gridCatB: 'all',
   gridPageB: 0,
+  mobileBTab: 'board',
   toggleStates: { tv: 0, wheelchair: 0, outside: 0, sleep: 0, light: 0 }
 };
 let pain = { step: 0, loc: null, sev: null, type: null };
 let shiftLogs = [];
+
+function isMobileLayout() {
+  return window.innerWidth <= 680 || document.getElementById('device-wrap')?.classList.contains('vp-phone');
+}
+
+function setMobileBTab(tab) {
+  if (!canTap()) return;
+  sound.select();
+  state.mobileBTab = tab;
+  const vb = document.getElementById('variant-b');
+  if (vb) {
+    vb.classList.remove('show-board', 'show-keys');
+    vb.classList.add('show-' + tab);
+  }
+  document.getElementById('m-tab-board')?.classList.toggle('active', tab === 'board');
+  document.getElementById('m-tab-keys')?.classList.toggle('active', tab === 'keys');
+}
 
 function toggleKiosk() {
   sound.select();
@@ -3533,24 +3763,29 @@ function updateAllChips() {
 }
 
 function updateAllQuickButtons() {
-  // Variant A (8 items per page = 2x4 grid, zero scroll)
+  const isMobile = isMobileLayout();
+  const pageSizeA = isMobile ? 6 : 8; // 2x3 on mobile phones, 2x4 on tablet/desktop
+  const pageSizeB = 6; // 2x3 on all screens
+
+  // Variant A (zero scroll)
   const listA = getFilteredQuickActions(state.gridCatA || 'all');
-  const pageA = Math.min(state.gridPageA || 0, Math.max(0, Math.ceil(listA.length / 8) - 1));
+  const pageA = Math.min(state.gridPageA || 0, Math.max(0, Math.ceil(listA.length / pageSizeA) - 1));
   state.gridPageA = pageA;
-  renderGridControls('a', state.gridCatA || 'all', pageA, listA.length, 8);
-  renderQuickButtons(document.getElementById('grid-a'), listA.slice(pageA * 8, (pageA + 1) * 8));
+  renderGridControls('a', state.gridCatA || 'all', pageA, listA.length, pageSizeA);
+  renderQuickButtons(document.getElementById('grid-a'), listA.slice(pageA * pageSizeA, (pageA + 1) * pageSizeA));
 
-  // Variant B (6 items per page = 2x3 grid, zero scroll alongside keyboard)
+  // Variant B (zero scroll)
   const listB = getFilteredQuickActions(state.gridCatB || 'all');
-  const pageB = Math.min(state.gridPageB || 0, Math.max(0, Math.ceil(listB.length / 6) - 1));
+  const pageB = Math.min(state.gridPageB || 0, Math.max(0, Math.ceil(listB.length / pageSizeB) - 1));
   state.gridPageB = pageB;
-  renderGridControls('b', state.gridCatB || 'all', pageB, listB.length, 6);
-  renderQuickButtons(document.getElementById('grid-b'), listB.slice(pageB * 6, (pageB + 1) * 6));
+  renderGridControls('b', state.gridCatB || 'all', pageB, listB.length, pageSizeB);
+  renderQuickButtons(document.getElementById('grid-b'), listB.slice(pageB * pageSizeB, (pageB + 1) * pageSizeB));
 
-  // Variant C (Tabbed category panel, 8 max per panel)
+  // Variant C (Tabbed category panel, 6 on mobile / 8 on tablet)
   const catPanel = document.getElementById('cat-panel-c');
   if (catPanel && state.activeCat) {
-    renderQuickButtons(catPanel, QUICK_ACTIONS.filter(a => a.cat === state.activeCat).slice(0, 8));
+    const limitC = isMobile ? 6 : 8;
+    renderQuickButtons(catPanel, QUICK_ACTIONS.filter(a => a.cat === state.activeCat).slice(0, limitC));
   }
 }
 
@@ -4363,11 +4598,16 @@ function closePain() { sound.close(); document.getElementById('pain-modal').clas
 /* Viewport and Theme */
 function setViewport(vp, btn) {
   const wrap = document.getElementById('device-wrap');
-  wrap.classList.remove('vp-compact', 'vp-monitor17', 'vp-wide');
+  wrap.classList.remove('vp-phone', 'vp-compact', 'vp-monitor17', 'vp-wide');
   wrap.classList.add('vp-' + vp);
   btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  updateAllQuickButtons();
 }
+
+window.addEventListener('resize', () => {
+  updateAllQuickButtons();
+});
 function toggleInfo() {
   const panel = document.getElementById('info-panel');
   const btn = document.getElementById('info-toggle');
