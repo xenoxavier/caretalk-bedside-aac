@@ -863,19 +863,56 @@
   }
 
   /* ==========================================================================
-     Variant A Details: Bottom Sheet Keyboard
+     Variant A Details: Dedicated Bottom Action Zone & Sheet Keyboard (Zero Overlap!)
      ========================================================================== */
-  .v-a .keyboard-fab {
-    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
-    background: var(--ink); color: #fff; border: none;
-    padding: 8px 18px; border-radius: var(--radius-full);
-    font-family: var(--font-heading); font-weight: 700; font-size: 0.84rem;
-    display: flex; align-items: center; gap: 6px; cursor: pointer;
-    box-shadow: var(--shadow-hover); z-index: 5;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  .v-a .bottom-action-zone {
+    flex-shrink: 0;
+    padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0));
+    background: var(--surface);
+    border-top: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
   }
-  .v-a .keyboard-fab:hover { transform: translateX(-50%) translateY(-2px) scale(1.03); }
-  .v-a .keyboard-fab:active { transform: translateX(-50%) scale(0.95); }
+  .build-sentence-bar-btn {
+    width: 100%;
+    max-width: 580px;
+    height: 42px;
+    background: var(--ink);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.90rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    transition: all 0.15s ease;
+  }
+  [data-theme="dark"] .build-sentence-bar-btn, [data-theme="night"] .build-sentence-bar-btn {
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+  }
+  .build-sentence-bar-btn:hover {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--primary-glow);
+  }
+  .build-sentence-bar-btn:active {
+    transform: scale(0.98);
+  }
+  .cta-arrow {
+    font-size: 0.75rem;
+    opacity: 0.75;
+  }
 
   .v-a .keyboard-sheet {
     position: absolute; left: 0; right: 0; bottom: 0;
@@ -1155,43 +1192,45 @@
     .pain-btn { padding: 12px 22px; font-size: 1rem; }
     .pain-btn svg { width: 22px; height: 22px; }
     .lang-toggle button { padding: 10px 16px; font-size: 0.88rem; }
-    .message-zone { padding: 18px 24px; }
-    .msg-display { font-size: 1.5rem; }
-    .btn { padding: 12px 20px; font-size: 0.95rem; }
-    .btn-primary { padding: 12px 26px; font-size: 1.05rem; }
-    .chip { padding: 12px 20px; font-size: 1rem; }
-    .quick-grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 16px; padding: 20px; }
-    .quick-btn { min-height: 135px; }
-    .qb-icon-wrap { width: 54px; height: 54px; }
-    .qb-icon-wrap svg { width: 32px; height: 32px; }
-    .qb-label { font-size: 1.02rem; }
+    .message-zone { padding: 14px 20px; }
+    .msg-display { font-size: 1.4rem; }
+    .btn { padding: 10px 18px; font-size: 0.92rem; }
+    .btn-primary { padding: 10px 22px; font-size: 1rem; }
+    .chip { padding: 10px 18px; font-size: 0.95rem; }
+    .quick-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 12px; padding: 12px 18px; }
+    .v-b .quick-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 10px 14px; }
+    .quick-btn { min-height: 0; }
+    .qb-icon-wrap { width: 48px; height: 48px; }
+    .qb-icon-wrap svg { width: 28px; height: 28px; }
+    .qb-label { font-size: 1.00rem; }
     .v-c .msg-display-c { font-size: 1.85rem; min-height: 110px; }
     .v-c .speak-circle { width: 110px; height: 110px; font-size: 0.85rem; }
     .v-c .speak-circle svg { width: 32px; height: 32px; }
   }
   @container app (min-width: 1050px) {
-    .app-bar { padding: 20px 32px; }
+    .app-bar { padding: 16px 28px; }
     .wordmark { font-size: 1.25rem; }
-    .pain-btn { padding: 14px 28px; font-size: 1.08rem; }
+    .pain-btn { padding: 14px 26px; font-size: 1.08rem; }
     .pain-btn svg { width: 24px; height: 24px; }
-    .message-zone { padding: 22px 32px; }
-    .msg-display { font-size: 1.8rem; }
-    .btn { padding: 14px 24px; font-size: 1.02rem; }
-    .btn-primary { padding: 15px 32px; font-size: 1.15rem; }
-    .chip { padding: 14px 24px; font-size: 1.08rem; }
-    .quick-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 26px; }
-    .quick-btn { min-height: 160px; }
-    .qb-icon-wrap { width: 62px; height: 62px; }
-    .qb-icon-wrap svg { width: 36px; height: 36px; }
-    .qb-label { font-size: 1.12rem; }
-    .v-c .hero-c { padding: 24px 32px 14px; gap: 24px; }
-    .v-c .msg-display-c { font-size: 2.2rem; min-height: 130px; }
-    .v-c .speak-circle { width: 130px; height: 130px; font-size: 0.95rem; }
-    .v-c .speak-circle svg { width: 38px; height: 38px; }
-    .v-c .category-rail { padding: 16px 32px; gap: 14px; }
-    .v-c .cat-tab { padding: 12px 22px; font-size: 1rem; }
-    .v-c .category-panel { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; padding: 20px 32px 70px; }
-    .v-b .keyboard-col { padding: 24px; }
+    .message-zone { padding: 16px 26px; }
+    .msg-display { font-size: 1.7rem; }
+    .btn { padding: 12px 20px; font-size: 1rem; }
+    .btn-primary { padding: 14px 28px; font-size: 1.10rem; }
+    .chip { padding: 12px 20px; font-size: 1.05rem; }
+    .quick-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 14px; padding: 14px 24px; }
+    .v-b .quick-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 12px; padding: 12px 18px; }
+    .quick-btn { min-height: 0; }
+    .qb-icon-wrap { width: 56px; height: 56px; }
+    .qb-icon-wrap svg { width: 32px; height: 32px; }
+    .qb-label { font-size: 1.10rem; }
+    .v-c .hero-c { padding: 20px 28px 12px; gap: 20px; }
+    .v-c .msg-display-c { font-size: 2.1rem; min-height: 120px; }
+    .v-c .speak-circle { width: 120px; height: 120px; font-size: 0.95rem; }
+    .v-c .speak-circle svg { width: 36px; height: 36px; }
+    .v-c .category-rail { padding: 14px 28px; gap: 12px; }
+    .v-c .cat-tab { padding: 10px 20px; font-size: 1rem; }
+    .v-c .category-panel { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 14px; padding: 14px 24px 70px; }
+    .v-b .keyboard-col { padding: 18px; }
   }
 
   /* ==========================================================================
@@ -2242,23 +2281,37 @@
     .grid-page-indicator { font-size: 0.74rem; }
     .quick-grid {
       padding: 6px 8px !important;
-      gap: 8px !important;
+      gap: 6px !important;
       grid-template-columns: repeat(2, 1fr) !important;
-      grid-template-rows: repeat(2, 1fr) !important;
+      grid-template-rows: repeat(3, 1fr) !important;
       flex: 1 !important;
       min-height: 0 !important;
       height: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .quick-grid[data-count="4"], .quick-grid[data-count="3"], .quick-grid[data-count="2"], .quick-grid[data-count="1"] {
+      grid-template-rows: repeat(2, 1fr) !important;
     }
     .quick-btn {
       min-height: 0 !important;
-      padding: 8px !important;
+      padding: 6px !important;
       border-radius: var(--radius-md) !important;
+      gap: 4px !important;
+    }
+    .qb-icon-wrap { width: 38px !important; height: 38px !important; }
+    .qb-icon-wrap svg { width: 22px !important; height: 22px !important; }
+    .qb-label { font-size: 0.88rem !important; font-weight: 800 !important; }
+    .qb-badge { font-size: 0.60rem !important; padding: 2px 5px !important; }
+
+    .v-a .bottom-action-zone {
+      padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0)) !important;
+    }
+    .build-sentence-bar-btn {
+      height: 38px !important;
+      font-size: 0.82rem !important;
       gap: 6px !important;
     }
-    .qb-icon-wrap { width: 44px !important; height: 44px !important; }
-    .qb-icon-wrap svg { width: 26px !important; height: 26px !important; }
-    .qb-label { font-size: 0.95rem !important; font-weight: 800 !important; }
-    .qb-badge { font-size: 0.62rem !important; padding: 2px 5px !important; }
 
     /* Variant B Mobile Switcher & Stacking */
     .mobile-b-tabs {
@@ -2500,10 +2553,14 @@
             <div class="quick-grid" id="grid-a"></div>
           </div>
 
-          <button class="keyboard-fab" onclick="toggleSheet(true)">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
-            <span data-i18n="typeCta">Build a Sentence</span>
-          </button>
+          <!-- Dedicated Bottom Action Zone: Build a Sentence (Zero Overlap with Grid) -->
+          <div class="bottom-action-zone">
+            <button class="build-sentence-bar-btn" onclick="toggleSheet(true)" title="Open Talking Keyboard &amp; Sentence Builder">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"/></svg>
+              <span data-i18n="typeCta">Build a Sentence (Keyboard &amp; Starters)</span>
+              <span class="cta-arrow">▲</span>
+            </button>
+          </div>
 
           <div class="keyboard-sheet" id="sheet-a">
             <button class="sheet-close" onclick="toggleSheet(false)">&times;</button>
@@ -3298,6 +3355,21 @@ const ICONS = {
   doorIn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/><path d="m9 9-3 3 3 3"/><path d="M6 12h7"/></svg>',
   wheelchair: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M5 20a5 5 0 1 0 5-5H7.5"/><path d="M12 11h4l3 6"/><path d="m9 11 3-3 2 3"/></svg>',
   bed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>',
+  bedReturn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>',
+  insideReturn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/><path d="m9 9-3 3 3 3"/><path d="M6 12h7"/></svg>',
+  tea: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>',
+  suction: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2 6 10l4 4 8-8-4-4Z"/><path d="m3 21 6-6"/><path d="m14 8 2 2"/></svg>',
+  glasses: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="15" r="4"/><circle cx="18" cy="15" r="4"/><path d="M14 15a2 2 0 0 0-4 0"/><path d="M2.5 13 5 7h14l2.5 6"/></svg>',
+  phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+  pillow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="M3 10c4 1 14 1 18 0"/><path d="M3 14c4-1 14-1 18 0"/></svg>',
+  breath: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v7"/><path d="M7 14c-2.5 0-4-2-4-5 0-3 2-4 4-4s3 2 4 4"/><path d="M17 14c2.5 0 4-2 4-5 0-3-2-4-4-4s-3 2-4 4"/><path d="M8 18c0 2 2 3 4 3s4-1 4-3"/></svg>',
+  nausea: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 9h.01"/><path d="M15 9h.01"/><path d="M8 16c1-1.5 2.5-2 4-2s3 .5 4 2"/></svg>',
+  window: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>',
+  windowOpen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18M6 8l3 4-3 4M18 8l-3 4 3 4"/></svg>',
+  family: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  doctor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>',
+  hand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.8-2.8L15 13"/></svg>',
+  explain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
   
   /* Body Parts for Visual Pain Assessment */
   partHead: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="11" r="7"/><path d="M12 18v4"/><path d="M9 22h6"/><path d="M9 11a3 3 0 0 1 6 0"/></svg>',
@@ -3373,7 +3445,8 @@ const STRINGS = {
     catAll: '⭐ All',
     catNeeds: '🫖 Needs',
     catBed: '🛏️ Bed & Move',
-    catComfort: '🛋️ Comfort',
+    catComfort: '🛋️ Comfort & Body',
+    catSocial: '👨‍👩‍👧 Family & Help',
     page: 'Page',
     prevPage: '◀ Prev',
     nextPage: 'Next ▶',
@@ -3432,7 +3505,8 @@ const STRINGS = {
     catAll: '⭐ Alle',
     catNeeds: '🫖 Bedarf',
     catBed: '🛏️ Bett & Lagerung',
-    catComfort: '🛋️ Komfort',
+    catComfort: '🛋️ Komfort & Befinden',
+    catSocial: '👨‍👩‍👧 Familie & Kontakt',
     page: 'Seite',
     prevPage: '◀ Zurück',
     nextPage: 'Weiter ▶',
@@ -3443,10 +3517,10 @@ const STRINGS = {
 };
 
 const CAT_LABELS = {
-  thing:   { en: 'Things',          de: 'Dinge' },
-  action:  { en: 'Position & Rest', de: 'Position & Ruhe' },
-  comfort: { en: 'Comfort',         de: 'Komfort' },
-  social:  { en: 'Urgent',          de: 'Dringend' }
+  thing:   { en: 'Needs',            de: 'Bedarf' },
+  action:  { en: 'Bed & Move',       de: 'Bett & Lagerung' },
+  comfort: { en: 'Comfort & Body',   de: 'Komfort & Befinden' },
+  social:  { en: 'Family & Help',    de: 'Familie & Kontakt' }
 };
 
 /* Fast Response Definitions */
@@ -3479,43 +3553,44 @@ const FAST_RESPONSES = {
 
 /* Quick Action Soundboard */
 const QUICK_ACTIONS = [
+  // --- 🫖 NEEDS (thing) ---
   { id:'water', cat:'thing', icon:'droplet', en:'Water', de:'Wasser', phrase:{ en:'I would like a drink of water, please.', de:'Ich möchte bitte etwas Wasser trinken.' } },
+  { id:'tea', cat:'thing', icon:'tea', en:'Warm Tea', de:'Warmer Tee', phrase:{ en:'I would like a warm cup of tea, please.', de:'Ich möchte bitte einen warmen Tee trinken.' } },
   { id:'food', cat:'thing', icon:'food', en:'Food', de:'Essen', phrase:{ en:'I would like something to eat.', de:'Ich habe Hunger und möchte gerne etwas essen.' } },
-  { 
-    id:'tv', cat:'thing', isToggle: true,
-    states: [
-      { icon:'tv', en:'Watch TV', de:'Fernsehen', phrase:{ en:'I would like to watch TV, please.', de:'Ich möchte bitte den Fernseher anmachen.' }, badge:{ en:'OFF', de:'AUS' } },
-      { icon:'tvOff', en:'Done with TV', de:'Fertig mit TV', phrase:{ en:'I am finished watching TV. Please turn it off.', de:'Ich bin fertig mit Fernsehen, bitte schalten Sie ihn aus.' }, badge:{ en:'ON', de:'AN' } }
-    ]
-  },
-  { id:'pill', cat:'thing', icon:'pill', en:'Medicine', de:'Medikamente', phrase:{ en:'I need my medication.', de:'Ich brauche bitte meine Medikamente.' } },
+  { id:'pill', cat:'thing', icon:'pill', en:'Medicine', de:'Medikamente', phrase:{ en:'I need my medication, please.', de:'Ich brauche bitte meine Medikamente.' } },
   { id:'wc', cat:'thing', icon:'wc', en:'Toilet', de:'Toilette', phrase:{ en:'I need to use the bathroom.', de:'Ich muss bitte dringend auf die Toilette.' } },
+  { id:'suction', cat:'thing', icon:'suction', en:'Mouth Care', de:'Mund / Absaugen', phrase:{ en:'Please help clean or suction my mouth.', de:'Bitte helfen Sie mir beim Absaugen oder bei der Mundpflege.' } },
+  { id:'glasses', cat:'thing', icon:'glasses', en:'Glasses', de:'Brille', phrase:{ en:'Please give me my glasses.', de:'Bitte geben Sie mir meine Brille.' } },
+  { id:'phone', cat:'thing', icon:'phone', en:'Phone', de:'Handy', phrase:{ en:'Please hand me my phone.', de:'Bitte geben Sie mir mein Smartphone oder Handy.' } },
+
+  // --- 🛏️ BED & MOBILITY (action) ---
+  { id:'raise', cat:'action', icon:'arrowUp', en:'Raise Head', de:'Kopfteil hoch', phrase:{ en:'Please raise my head and upper body.', de:'Bitte stellen Sie mein Kopfteil höher.' } },
+  { id:'lower', cat:'action', icon:'arrowDown', en:'Lower Head', de:'Kopfteil flach', phrase:{ en:'Please lower my head and upper body.', de:'Bitte stellen Sie mein Kopfteil flacher.' } },
+  { id:'pillow', cat:'action', icon:'pillow', en:'Fix Pillow', de:'Kissen richten', phrase:{ en:'Please adjust and fluff my pillow.', de:'Bitte richten Sie mein Kissen neu aus.' } },
+  { id:'turnleft', cat:'action', icon:'rotateLeft', en:'Turn Left', de:'Nach links', phrase:{ en:'Please turn me onto my left side.', de:'Bitte drehen Sie mich auf die linke Seite.' } },
+  { id:'turnright', cat:'action', icon:'rotateRight', en:'Turn Right', de:'Nach rechts', phrase:{ en:'Please turn me onto my right side.', de:'Bitte drehen Sie mich auf die rechte Seite.' } },
+  { id:'position', cat:'action', icon:'move', en:'Reposition', de:'Umlagern', phrase:{ en:'Please help me change my position.', de:'Bitte helfen Sie mir beim Umlagern in eine neue Position.' } },
   { 
     id:'wheelchair', cat:'action', isToggle: true,
     states: [
-      { icon:'wheelchair', en:'Wheelchair', de:'In Rollstuhl', phrase:{ en:'I would like to get into the wheelchair.', de:'Ich möchte bitte in den Rollstuhl gesetzt werden.' }, badge:{ en:'IN BED', de:'IM BETT' } },
+      { icon:'wheelchair', en:'To Wheelchair', de:'In Rollstuhl', phrase:{ en:'I would like to get into the wheelchair.', de:'Ich möchte bitte in den Rollstuhl gesetzt werden.' }, badge:{ en:'IN BED', de:'IM BETT' } },
       { icon:'bedReturn', en:'Back to Bed', de:'Ins Bett', phrase:{ en:'I would like to go back into bed.', de:'Ich möchte bitte wieder zurück ins Bett gelegt werden.' }, badge:{ en:'IN CHAIR', de:'IM STUHL' } }
     ]
   },
   { 
-    id:'outside', cat:'action', isToggle: true,
-    states: [
-      { icon:'outside', en:'Go Outside', de:'Nach draußen', phrase:{ en:'I would like to go outside for fresh air.', de:'Ich möchte gerne etwas nach draußen an die frische Luft.' }, badge:{ en:'INSIDE', de:'DRINNEN' } },
-      { icon:'insideReturn', en:'Go Inside', de:'Wieder rein', phrase:{ en:'I would like to go back inside now.', de:'Ich möchte bitte wieder hineingehen.' }, badge:{ en:'OUTSIDE', de:'DRAUSSEN' } }
-    ]
-  },
-  { id:'position', cat:'action', icon:'move', en:'Change position', de:'Position ändern', phrase:{ en:'Please change my position.', de:'Bitte lagern Sie mich um.' } },
-  { id:'raise', cat:'action', icon:'arrowUp', en:'Raise head', de:'Oberkörper hoch', phrase:{ en:'Please raise my upper body.', de:'Bitte stellen Sie mein Kopfteil höher.' } },
-  { id:'lower', cat:'action', icon:'arrowDown', en:'Lower head', de:'Oberkörper runter', phrase:{ en:'Please lower my upper body.', de:'Bitte stellen Sie mein Kopfteil flacher.' } },
-  { id:'turnleft', cat:'action', icon:'rotateLeft', en:'Turn left', de:'Nach links drehen', phrase:{ en:'Please turn me to the left.', de:'Bitte drehen Sie mich nach links.' } },
-  { id:'turnright', cat:'action', icon:'rotateRight', en:'Turn right', de:'Nach rechts drehen', phrase:{ en:'Bitte drehen Sie mich nach rechts.' } },
-  { 
     id:'sleep', cat:'action', isToggle: true,
     states: [
-      { icon:'moon', en:'Sleep', de:'Schlafen', phrase:{ en:'I want to sleep now.', de:'Ich möchte mich jetzt ausruhen und schlafen.' }, badge:{ en:'AWAKE', de:'WACH' } },
+      { icon:'moon', en:'Sleep', de:'Schlafen', phrase:{ en:'I want to sleep and rest now.', de:'Ich möchte mich jetzt ausruhen und schlafen.' }, badge:{ en:'AWAKE', de:'WACH' } },
       { icon:'sunWake', en:'Awake', de:'Wach', phrase:{ en:'I am awake now.', de:'Ich bin jetzt wieder wach.' }, badge:{ en:'ASLEEP', de:'SCHLÄFT' } }
     ]
   },
+
+  // --- 🛋️ COMFORT & SYMPTOMS (comfort) ---
+  { id:'cold', cat:'comfort', icon:'snow', en:'Too Cold', de:'Zu kalt', phrase:{ en:"I am feeling cold. Please bring a blanket.", de:'Mir ist kalt, bitte decken Sie mich warm zu.' } },
+  { id:'hot', cat:'comfort', icon:'sun', en:'Too Hot', de:'Zu warm', phrase:{ en:"I am too warm. Please remove a blanket.", de:'Mir ist zu warm, bitte nehmen Sie die Decke etwas weg.' } },
+  { id:'breath', cat:'comfort', icon:'breath', en:'Hard to Breathe', de:'Atemnot', phrase:{ en:'I am having trouble breathing. Please help.', de:'Ich bekomme schwer Luft, bitte helfen Sie mir.' } },
+  { id:'nausea', cat:'comfort', icon:'nausea', en:'Nauseous', de:'Übelkeit', phrase:{ en:'I feel nauseous and sick to my stomach.', de:'Mir ist übel und schlecht.' } },
+  { id:'uncomfortable', cat:'comfort', icon:'wave', en:'Uncomfortable', de:'Unbequem', phrase:{ en:"I am lying uncomfortably. Please help me.", de:'Ich liege unbequem, bitte helfen Sie mir.' } },
   { 
     id:'light', cat:'comfort', isToggle: true,
     states: [
@@ -3523,9 +3598,33 @@ const QUICK_ACTIONS = [
       { icon:'lightOff', en:'Light OFF', de:'Licht AUS', phrase:{ en:'Please turn the light off.', de:'Bitte schalten Sie das Licht aus.' }, badge:{ en:'ON', de:'AN' } }
     ]
   },
-  { id:'cold', cat:'comfort', icon:'snow', en:'Too Cold', de:'Zu kalt', phrase:{ en:"I am cold.", de:'Mir ist kalt, bitte decken Sie mich zu.' } },
-  { id:'hot', cat:'comfort', icon:'sun', en:'Too Hot', de:'Zu heiß', phrase:{ en:"I am too hot.", de:'Mir ist zu warm, bitte nehmen Sie die Decke weg.' } },
-  { id:'uncomfortable', cat:'comfort', icon:'wave', en:'Uncomfortable', de:'Unbequem', phrase:{ en:"I am uncomfortable.", de:'Ich liege unbequem, bitte helfen Sie mir.' } }
+  { 
+    id:'window', cat:'comfort', isToggle: true,
+    states: [
+      { icon:'windowOpen', en:'Open Window', de:'Fenster auf', phrase:{ en:'Please open the window for fresh air.', de:'Bitte öffnen Sie das Fenster für etwas frische Luft.' }, badge:{ en:'CLOSED', de:'ZU' } },
+      { icon:'window', en:'Close Window', de:'Fenster zu', phrase:{ en:'Please close the window now.', de:'Bitte schließen Sie das Fenster wieder.' }, badge:{ en:'OPEN', de:'OFFEN' } }
+    ]
+  },
+  { 
+    id:'tv', cat:'comfort', isToggle: true,
+    states: [
+      { icon:'tv', en:'Watch TV', de:'Fernsehen', phrase:{ en:'I would like to watch TV, please.', de:'Ich möchte bitte den Fernseher anmachen.' }, badge:{ en:'OFF', de:'AUS' } },
+      { icon:'tvOff', en:'Done with TV', de:'Fertig mit TV', phrase:{ en:'I am finished watching TV. Please turn it off.', de:'Ich bin fertig mit Fernsehen, bitte schalten Sie ihn aus.' }, badge:{ en:'ON', de:'AN' } }
+    ]
+  },
+
+  // --- 👨‍👩‍👧 FAMILY & SOCIAL (social) ---
+  { id:'family', cat:'social', icon:'family', en:'Call Family', de:'Familie rufen', phrase:{ en:'Please call my family or loved ones.', de:'Bitte rufen Sie meine Familie oder Angehörigen an.' } },
+  { id:'doctor', cat:'social', icon:'doctor', en:'See Doctor', de:'Arzt sprechen', phrase:{ en:'I would like to speak to the doctor.', de:'Ich möchte bitte mit der Ärztin oder dem Arzt sprechen.' } },
+  { id:'explain', cat:'social', icon:'explain', en:'What is happening?', de:'Was passiert?', phrase:{ en:'Can you please explain what you are doing?', de:'Können Sie mir bitte kurz erklären, was gerade gemacht wird?' } },
+  { id:'hand', cat:'social', icon:'hand', en:'Hold Hand', de:'Hand halten', phrase:{ en:'Please stay with me and hold my hand.', de:'Bitte bleiben Sie einen Moment bei mir und halten meine Hand.' } },
+  { 
+    id:'outside', cat:'social', isToggle: true,
+    states: [
+      { icon:'doorOut', en:'Go Outside', de:'Nach draußen', phrase:{ en:'I would like to go outside for fresh air.', de:'Ich möchte gerne etwas nach draußen an die frische Luft.' }, badge:{ en:'INSIDE', de:'DRINNEN' } },
+      { icon:'doorIn', en:'Go Inside', de:'Wieder rein', phrase:{ en:'I would like to go back inside now.', de:'Ich möchte bitte wieder hineingehen.' }, badge:{ en:'OUTSIDE', de:'DRAUSSEN' } }
+    ]
+  }
 ];
 
 const STARTERS = [
@@ -3812,7 +3911,8 @@ function renderGridControls(variant, currentCat, currentPage, totalItems, pageSi
     { key: 'all', label: STRINGS[state.lang].catAll },
     { key: 'thing', label: STRINGS[state.lang].catNeeds },
     { key: 'action', label: STRINGS[state.lang].catBed },
-    { key: 'comfort', label: STRINGS[state.lang].catComfort }
+    { key: 'comfort', label: STRINGS[state.lang].catComfort },
+    { key: 'social', label: STRINGS[state.lang].catSocial }
   ];
 
   catsContainer.innerHTML = catKeys.map(c => `
@@ -4495,6 +4595,7 @@ function toggleSound(btn) {
    ========================================================================== */
 function renderQuickButtons(container, actions) {
   if (!container) return;
+  container.setAttribute('data-count', actions.length);
   container.innerHTML = actions.map(raw => {
     const a = getEffectiveAction(raw);
     const badgeHtml = raw.isToggle && a.badge ? `
