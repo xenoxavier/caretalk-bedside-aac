@@ -888,13 +888,33 @@
     background: var(--surface); border-top: 1px solid var(--border);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-modal);
     padding: 10px 16px 16px; transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 6; max-height: 85%; overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 6; max-height: 88%; overflow: hidden;
     display: flex; flex-direction: column; gap: 6px;
   }
   .v-a .keyboard-sheet.open { transform: translateY(0); }
   .v-a .sheet-handle { width: 38px; height: 4px; background: var(--border-strong); border-radius: var(--radius-full); margin: 0 auto 6px; }
   .v-a .sheet-close { position: absolute; top: 8px; right: 12px; background: none; border: none; color: var(--ink-muted); font-size: 1.3rem; cursor: pointer; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
   .v-a .sheet-close:hover { background: var(--surface-subtle); color: var(--ink); }
+  
+  .v-a .sheet-msg-zone {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: var(--surface-subtle);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+  .v-a .sheet-msg-zone .msg-display {
+    font-size: 1.02rem;
+    flex: 1;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+  }
 
   /* ==========================================================================
      Variant B Details: Persistent Split Rail (Zero-Scroll 100% Fit)
@@ -1829,6 +1849,31 @@
     color: var(--ink-muted);
     line-height: 1.35;
   }
+  .shift-replay-btn {
+    align-self: center;
+    background: var(--primary);
+    color: var(--primary-ink);
+    border: none;
+    border-radius: var(--radius-xs);
+    padding: 6px 11px;
+    font-family: var(--font-heading);
+    font-size: 0.74rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px var(--primary-glow);
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+  }
+  .shift-replay-btn:hover {
+    background: var(--primary-hover);
+    transform: scale(1.05);
+  }
+  .shift-replay-btn:active {
+    transform: scale(0.94);
+  }
 
   @container app (min-width: 700px) {
     .fast-response-bar { padding: 12px 24px; gap: 12px; }
@@ -2188,6 +2233,17 @@
           <div class="keyboard-sheet" id="sheet-a">
             <button class="sheet-close" onclick="toggleSheet(false)">&times;</button>
             <div class="sheet-handle"></div>
+            <div class="sheet-msg-zone">
+              <div class="msg-display placeholder" data-i18n-ph="placeholder" onclick="if(!this.classList.contains('placeholder')) speak()">Tap any button to talk immediately…</div>
+              <div class="msg-controls">
+                <button class="btn" onclick="undo()" title="Undo last word"><span data-i18n="undo">Undo</span></button>
+                <button class="btn" onclick="clearMsg()" title="Clear message"><span data-i18n="clear">Clear</span></button>
+                <button class="btn btn-primary speak-btn" onclick="speak()" title="Speak message aloud">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                  <span data-i18n="speak">SPEAK</span>
+                </button>
+              </div>
+            </div>
             <div class="chip-section">
               <div class="chip-label">✨ <span data-i18n="langLabel">Starters</span></div>
               <div class="chip-row chip-row-scrollless" id="starters-a"></div>
@@ -2455,7 +2511,7 @@
 
     <div class="pain-step" data-step="3">
       <div class="step-title" data-i18n="painGenerate">Generate &amp; Speak</div>
-      <div class="pain-review" id="pain-review"></div>
+      <div class="pain-review" id="pain-review" onclick="painFinish()" title="Tap to Speak"></div>
     </div>
 
     <div class="pain-nav">
@@ -2526,7 +2582,7 @@
           <select id="voice-select-de" class="voice-select" onchange="onVoiceChange('de', this.value)">
             <option value="">Detecting natural voices…</option>
           </select>
-          <button class="btn-test-voice" onclick="testVoice('de')" data-i18n="testVoiceBtn">▶ Test</button>
+          <button class="btn-test-voice" onclick="testVoice('de')" data-i18n="testVoiceBtn">🔊 Test Voice</button>
         </div>
       </div>
 
@@ -2539,7 +2595,7 @@
           <select id="voice-select-en" class="voice-select" onchange="onVoiceChange('en', this.value)">
             <option value="">Detecting natural voices…</option>
           </select>
-          <button class="btn-test-voice" onclick="testVoice('en')" data-i18n="testVoiceBtn">▶ Test</button>
+          <button class="btn-test-voice" onclick="testVoice('en')" data-i18n="testVoiceBtn">🔊 Test Voice</button>
         </div>
       </div>
 
@@ -2978,7 +3034,7 @@ const STRINGS = {
     voiceStudioSub: 'Select natural voices, pitch & speech rate (100% Free)',
     voiceGerman: 'German Voice (Deutsch)',
     voiceEnglish: 'English Voice',
-    testVoiceBtn: '▶ Test',
+    testVoiceBtn: '🔊 Test Voice',
     speechSpeed: 'Speech Speed (Rate)',
     speechPitch: 'Voice Pitch (Warmth)',
     suggestionsLabel: 'Word Suggestions',
@@ -3035,7 +3091,7 @@ const STRINGS = {
     voiceStudioSub: 'Natürliche Stimmen, Tonhöhe & Sprechtempo wählen (100% Kostenlos)',
     voiceGerman: 'Deutsche Stimme (Deutsch)',
     voiceEnglish: 'Englische Stimme',
-    testVoiceBtn: '▶ Probe hören',
+    testVoiceBtn: '🔊 Stimme testen',
     speechSpeed: 'Sprechgeschwindigkeit',
     speechPitch: 'Tonhöhe (Klangfarbe)',
     suggestionsLabel: 'Wortvorschläge',
@@ -3570,9 +3626,23 @@ function updateShiftLogUI() {
           </div>
           <div class="shift-item-spoken">"${text}"</div>
         </div>
+        <button class="shift-replay-btn" onclick="replayLogItem(${item.id})" title="${state.lang === 'de' ? 'Erneut vorlesen' : 'Re-speak message'}" aria-label="Speak">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <span data-i18n="speak">SPEAK</span>
+        </button>
       </div>
     `;
   }).join('');
+}
+
+function replayLogItem(id) {
+  if (!canTap()) return;
+  const item = shiftLogs.find(l => l.id === id);
+  if (!item) return;
+  sound.select();
+  const text = state.lang === 'de' ? item.de : item.en;
+  showToast(`${STRINGS[state.lang].speaking}: "${text}"`);
+  say(text, state.lang);
 }
 
 function toggleShiftLog() {
